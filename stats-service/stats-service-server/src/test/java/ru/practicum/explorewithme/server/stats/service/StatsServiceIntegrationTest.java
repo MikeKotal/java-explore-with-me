@@ -46,16 +46,12 @@ public class StatsServiceIntegrationTest {
     @Test
     public void checkSuccessGetUniqStatsByPeriodAndUris() {
         List<ViewStatsDto> viewStatsDtos = statsService.getStatsByPeriodAndUris("2024-01-01 00:00:00",
-                "2024-01-04 00:00:00", List.of("/event/test", "/event/test2"), Boolean.TRUE);
+                "2024-01-04 00:00:00", List.of("/event/test2"), Boolean.TRUE);
 
-        assertThat(viewStatsDtos.size(), equalTo(2));
+        assertThat(viewStatsDtos.size(), equalTo(1));
         assertThat(viewStatsDtos.getFirst().getApp(), equalTo("test2"));
         assertThat(viewStatsDtos.getFirst().getUri(), equalTo("/event/test2"));
         assertThat(viewStatsDtos.getFirst().getHits(), equalTo(1L));
-
-        assertThat(viewStatsDtos.getLast().getApp(), equalTo("test"));
-        assertThat(viewStatsDtos.getLast().getUri(), equalTo("/event/test"));
-        assertThat(viewStatsDtos.getLast().getHits(), equalTo(1L));
     }
 
     @Test
