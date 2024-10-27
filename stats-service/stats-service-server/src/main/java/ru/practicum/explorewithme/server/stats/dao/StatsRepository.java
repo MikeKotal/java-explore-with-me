@@ -16,6 +16,7 @@ public interface StatsRepository extends JpaRepository<EndpointHit, Integer> {
             where eh.timestamp between ?1 and ?2
             and (?3 is null or eh.uri in ?3)
             group by eh.app, eh.uri
+            order by eh.ip desc
             """)
     List<ViewStats> getUniqStatsByUris(LocalDateTime start, LocalDateTime end, List<String> uris);
 
@@ -25,6 +26,7 @@ public interface StatsRepository extends JpaRepository<EndpointHit, Integer> {
             where eh.timestamp between ?1 and ?2
             and (?3 is null or eh.uri in ?3)
             group by eh.app, eh.uri
+            order by eh.ip desc
             """)
     List<ViewStats> getAllStatsByUris(LocalDateTime start, LocalDateTime end, List<String> uris);
 }
