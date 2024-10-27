@@ -9,7 +9,6 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
-import ru.practicum.explorewithme.gateway.exceptions.ValidationException;
 import ru.practicum.explorewithme.dto.stats.EndpointHitRequestDto;
 import ru.practicum.explorewithme.gateway.stats.StatsClient;
 
@@ -84,21 +83,6 @@ public class StatsControllerTest {
                 .andExpect(jsonPath("$[0].app", is(VIEW_STATS_DTO.getApp()), String.class))
                 .andExpect(jsonPath("$[0].uri", is(VIEW_STATS_DTO.getUri()), String.class))
                 .andExpect(jsonPath("$[0].hits", is(VIEW_STATS_DTO.getHits()), Long.class));
-    }
-
-    @Test
-    public void checkDateValidationException() throws Exception {
-        when(statsClient.getStats(anyString(), anyString(), anyList(), anyBoolean()))
-                .thenThrow(new ValidationException("Тест"));
-
-        mockMvc.perform(get(String.format("/stats?start=%s&end=%s&uris=%s&unique=%s",
-                        LocalDateTime.now(), LocalDateTime.now(), Collections.EMPTY_LIST, Boolean.TRUE))
-                        .characterEncoding(StandardCharsets.UTF_8)
-                        .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.error",
-                        is("Тест"),
-                        String.class));
     }
 
     @Test

@@ -48,7 +48,7 @@ public class StatsServiceImplTest {
     public void getUniqStatsByPeriodAndUrisTest() {
         Mockito.when(statsRepository.getUniqStatsByUris(any(LocalDateTime.class), any(LocalDateTime.class), anyList()))
                 .thenReturn(new ArrayList<>());
-        statsService.getStatsByPeriodAndUris("2024-01-01T00:00:00", "2024-01-02T00:00:00", new ArrayList<>(),
+        statsService.getStatsByPeriodAndUris("2024-01-01 00:00:00", "2024-01-02 00:00:00", new ArrayList<>(),
                 Boolean.TRUE);
 
         Mockito.verify(statsRepository, Mockito.times(1))
@@ -61,7 +61,7 @@ public class StatsServiceImplTest {
     public void getAllStatsByPeriodAndUrisTest() {
         Mockito.when(statsRepository.getAllStatsByUris(any(LocalDateTime.class), any(LocalDateTime.class), anyList()))
                 .thenReturn(new ArrayList<>());
-        statsService.getStatsByPeriodAndUris("2024-01-01T00:00:00", "2024-01-02T00:00:00", new ArrayList<>(),
+        statsService.getStatsByPeriodAndUris("2024-01-01 00:00:00", "2024-01-02 00:00:00", new ArrayList<>(),
                 Boolean.FALSE);
 
         Mockito.verify(statsRepository, Mockito.times(1))
@@ -73,7 +73,7 @@ public class StatsServiceImplTest {
     @Test
     public void whenEndIsBeforeStartThenReturnValidationException() {
         ValidationException exception = Assertions.assertThrows(ValidationException.class,
-                () -> statsService.getStatsByPeriodAndUris("2024-01-01T00:00:00", "2023-12-31T00:00:00",
+                () -> statsService.getStatsByPeriodAndUris("2024-01-01 00:00:00", "2023-12-31 00:00:00",
                         new ArrayList<>(), Boolean.TRUE));
 
         String expectedMessage = "Даты не могут быть равны или дата окончания не может быть раньше даты начала";
@@ -83,10 +83,20 @@ public class StatsServiceImplTest {
     @Test
     public void whenEndAndStartEqualsThenReturnValidationException() {
         ValidationException exception = Assertions.assertThrows(ValidationException.class,
-                () -> statsService.getStatsByPeriodAndUris("2024-01-01T00:00:00", "2024-01-01T00:00:00",
+                () -> statsService.getStatsByPeriodAndUris("2024-01-01 00:00:00", "2024-01-01 00:00:00",
                         new ArrayList<>(), Boolean.TRUE));
 
         String expectedMessage = "Даты не могут быть равны или дата окончания не может быть раньше даты начала";
+        Assertions.assertEquals(expectedMessage, exception.getMessage(), "Некорректное сообщение об ошибке");
+    }
+
+    @Test
+    public void checkDateValidation() {
+        ValidationException exception = Assertions.assertThrows(ValidationException.class,
+                () -> statsService.getStatsByPeriodAndUris("2024-01-01", "2024-01-01",
+                        new ArrayList<>(), Boolean.TRUE));
+
+        String expectedMessage = "Период времени необходимо передавать в формате 'yyyy-MM-dd HH:mm:ss'";
         Assertions.assertEquals(expectedMessage, exception.getMessage(), "Некорректное сообщение об ошибке");
     }
 }
