@@ -49,12 +49,12 @@ public class StatsServiceIntegrationTest {
                 "2024-01-04 00:00:00", List.of("/event/test", "/event/test2"), Boolean.TRUE);
 
         assertThat(viewStatsDtos.size(), equalTo(2));
-        assertThat(viewStatsDtos.getFirst().getApp(), equalTo("test"));
-        assertThat(viewStatsDtos.getFirst().getUri(), equalTo("/event/test"));
+        assertThat(viewStatsDtos.getFirst().getApp(), equalTo("test2"));
+        assertThat(viewStatsDtos.getFirst().getUri(), equalTo("/event/test2"));
         assertThat(viewStatsDtos.getFirst().getHits(), equalTo(1L));
 
-        assertThat(viewStatsDtos.getLast().getApp(), equalTo("test2"));
-        assertThat(viewStatsDtos.getLast().getUri(), equalTo("/event/test2"));
+        assertThat(viewStatsDtos.getLast().getApp(), equalTo("test"));
+        assertThat(viewStatsDtos.getLast().getUri(), equalTo("/event/test"));
         assertThat(viewStatsDtos.getLast().getHits(), equalTo(1L));
     }
 
@@ -64,8 +64,8 @@ public class StatsServiceIntegrationTest {
                 "2024-01-04 00:00:00", null, Boolean.FALSE);
 
         assertThat(viewStatsDtos.size(), equalTo(3));
-        assertThat(viewStatsDtos.getLast().getApp(), equalTo("test2"));
-        assertThat(viewStatsDtos.getLast().getUri(), equalTo("/event/test2"));
-        assertThat(viewStatsDtos.getLast().getHits(), equalTo(2L));
+        assertThat(viewStatsDtos.getFirst().getApp(), equalTo("test2"));
+        assertThat(viewStatsDtos.getFirst().getUri(), equalTo("/event/test2"));
+        assertThat(viewStatsDtos.getFirst().getHits(), equalTo(2L));
     }
 }
