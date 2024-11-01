@@ -45,8 +45,8 @@ public class StatsServiceIntegrationTest {
 
     @Test
     public void checkSuccessGetUniqStatsByPeriodAndUris() {
-        List<ViewStatsDto> viewStatsDtos = statsService.getStatsByPeriodAndUris("2024-01-01 00:00:00",
-                "2024-01-04 00:00:00", List.of("/event/test2"), Boolean.TRUE);
+        List<ViewStatsDto> viewStatsDtos = statsService.getStatsByPeriodAndUris("2024-01-01T00:00:00",
+                "2024-01-04T00:00:00", List.of("/event/test2"), Boolean.TRUE);
 
         assertThat(viewStatsDtos.size(), equalTo(1));
         assertThat(viewStatsDtos.getFirst().getApp(), equalTo("test2"));
@@ -56,8 +56,8 @@ public class StatsServiceIntegrationTest {
 
     @Test
     public void checkSuccessGetAllStatsByPeriodAndUris() {
-        List<ViewStatsDto> viewStatsDtos = statsService.getStatsByPeriodAndUris("2024-01-01 00:00:00",
-                "2024-01-04 00:00:00", null, Boolean.FALSE);
+        List<ViewStatsDto> viewStatsDtos = statsService.getStatsByPeriodAndUris("2024-01-01T00:00:00",
+                "2024-01-04T00:00:00", null, Boolean.FALSE);
 
         assertThat(viewStatsDtos.size(), equalTo(3));
         assertThat(viewStatsDtos.getFirst().getApp(), equalTo("test2"));

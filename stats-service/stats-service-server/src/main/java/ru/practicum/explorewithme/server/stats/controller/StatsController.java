@@ -32,7 +32,7 @@ public class StatsController {
     public List<ViewStatsDto> getStatsByPeriodAndUris(@RequestParam String start,
                                                       @RequestParam String end,
                                                       @RequestParam(required = false) List<String> uris,
-                                                      @RequestParam(defaultValue = "false") Boolean unique) {
+                                                      @RequestParam Boolean unique) {
         return statsService.getStatsByPeriodAndUris(start, end, uris, unique);
     }
 }
