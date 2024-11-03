@@ -14,13 +14,13 @@ import ru.practicum.explorewithme.gateway.client.BaseClient;
 public class CategoryClient extends BaseClient {
 
     @Autowired
-    public CategoryClient(@Value("${stats-server.url}") String serverUrl,
-                      @Value("${stats-server.admin}") String adminUrl,
-                      @Value("${stats-server.categories}") String categoriesUrl,
+    public CategoryClient(@Value("${main-server.url}") String serverUrl,
+                      @Value("${main-server.admin}") String adminUrl,
+                      @Value("${main-server.categories}") String categoriesUrl,
                       RestTemplateBuilder builder) {
         super(
                 builder
-                        .uriTemplateHandler(new DefaultUriBuilderFactory(serverUrl + adminUrl + categoriesUrl))
+                        .uriTemplateHandler(new DefaultUriBuilderFactory(String.format("%s%s/%s", serverUrl, adminUrl, categoriesUrl)))
                         .requestFactory(() -> new HttpComponentsClientHttpRequestFactory())
                         .build()
         );

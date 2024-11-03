@@ -18,13 +18,13 @@ import java.util.Map;
 public class UserClient extends BaseClient {
 
     @Autowired
-    public UserClient(@Value("${stats-server.url}") String serverUrl,
-                      @Value("${stats-server.admin}") String adminUrl,
-                      @Value("${stats-server.users}") String usersUrl,
+    public UserClient(@Value("${main-server.url}") String serverUrl,
+                      @Value("${main-server.admin}") String adminUrl,
+                      @Value("${main-server.users}") String usersUrl,
                        RestTemplateBuilder builder) {
         super(
                 builder
-                        .uriTemplateHandler(new DefaultUriBuilderFactory(serverUrl + adminUrl + usersUrl))
+                        .uriTemplateHandler(new DefaultUriBuilderFactory(String.format("%s%s/%s", serverUrl, adminUrl, usersUrl)))
                         .requestFactory(() -> new HttpComponentsClientHttpRequestFactory())
                         .build()
         );

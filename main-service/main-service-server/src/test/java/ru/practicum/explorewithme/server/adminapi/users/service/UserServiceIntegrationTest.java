@@ -65,7 +65,7 @@ public class UserServiceIntegrationTest {
 
         TypedQuery<User> query = em.createQuery("Select u from User u where u.id = :id", User.class);
 
-        int count = query.setParameter("id", newUser.getId()).getFirstResult();
+        int count = query.setParameter("id", newUser.getId()).getResultList().size();
         assertThat(count, equalTo(0));
     }
 }

@@ -8,10 +8,10 @@ import ru.practicum.explorewithme.dto.event.EventShortDto;
 import ru.practicum.explorewithme.dto.event.NewEventRequest;
 import ru.practicum.explorewithme.dto.event.State;
 import ru.practicum.explorewithme.dto.event.StateAction;
-import ru.practicum.explorewithme.dto.event.UpdateEventUserRequest;
+import ru.practicum.explorewithme.dto.event.UpdateEventRequest;
 import ru.practicum.explorewithme.server.adminapi.categories.model.Category;
 import ru.practicum.explorewithme.server.adminapi.users.model.User;
-import ru.practicum.explorewithme.server.privateapi.event.model.Event;
+import ru.practicum.explorewithme.server.privateapi.events.model.Event;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -78,7 +78,7 @@ public class EventMapper {
                 .participantLimit(eventRequest.getParticipantLimit() == null ? DEFAULT_VALUE : eventRequest.getParticipantLimit())
                 .requestModeration(eventRequest.getRequestModeration() == null ? Boolean.TRUE : eventRequest.getRequestModeration())
                 .title(eventRequest.getTitle())
-                .confirmedRequests(Long.valueOf(DEFAULT_VALUE))
+                .confirmedRequests(DEFAULT_VALUE)
                 .initiator(initiator)
                 .views(Long.valueOf(DEFAULT_VALUE))
                 .build();
@@ -86,13 +86,14 @@ public class EventMapper {
         return event;
     }
 
-    public static Event mapToUpdatedEvent(UpdateEventUserRequest updateRequest, Category newCategory, Event oldEvent) {
+    public static Event mapToUpdatedEvent(UpdateEventRequest updateRequest, Category newCategory, Event oldEvent) {
         log.info("Новое событие: {} и старое событие: {} в маппер", updateRequest, oldEvent);
         State newState = oldEvent.getState();
         if(updateRequest.getStateAction() != null) {
             switch (StateAction.valueOf(updateRequest.getStateAction())) {
-                case SEND_TO_REVIEW, PUBLISH_EVENT -> newState = State.PENDING;
+                case SEND_TO_REVIEW -> newState = State.PENDING;
                 case REJECT_EVENT, CANCEL_REVIEW -> newState = State.CANCELED;
+                case PUBLISH_EVENT -> newState = State.PUBLISHED;
             }
         }
         oldEvent.setTitle(updateRequest.getTitle() == null ? oldEvent.getTitle() : updateRequest.getTitle());

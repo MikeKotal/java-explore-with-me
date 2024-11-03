@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS events (
     participant_limit INTEGER,
     request_moderation BOOLEAN,
     title VARCHAR(120) NOT NULL,
-    confirmed_requests BIGINT,
+    confirmed_requests INTEGER,
     initiator_id BIGINT,
     state VARCHAR(255) NOT NULL,
     views BIGINT,
@@ -59,6 +59,7 @@ CREATE TABLE IF NOT EXISTS compilations (
 CREATE TABLE IF NOT EXISTS event_compilations (
     event_id BIGINT,
     compilation_id BIGINT,
+    PRIMARY KEY (event_id, compilation_id),
     CONSTRAINT fk_event_compilations_to_events FOREIGN KEY(event_id) REFERENCES events(id) ON DELETE CASCADE,
     CONSTRAINT fk_event_compilations_to_compilations FOREIGN KEY(compilation_id) REFERENCES compilations(id) ON DELETE CASCADE
 );

@@ -59,7 +59,7 @@ public class CategoryServiceIntegrationTest {
 
         TypedQuery<Category> query = em.createQuery("Select c from Category c where c.id = :id", Category.class);
 
-        int count = query.setParameter("id", newCategory.getId()).getFirstResult();
+        int count = query.setParameter("id", newCategory.getId()).getResultList().size();
         assertThat(count, equalTo(0));
     }
 }

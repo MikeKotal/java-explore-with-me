@@ -3,19 +3,28 @@ package ru.practicum.explorewithme;
 import org.apache.commons.lang3.RandomStringUtils;
 import ru.practicum.explorewithme.dto.category.CategoryDto;
 import ru.practicum.explorewithme.dto.category.NewCategoryRequest;
+import ru.practicum.explorewithme.dto.compilation.CompilationDto;
+import ru.practicum.explorewithme.dto.compilation.NewCompilationRequest;
+import ru.practicum.explorewithme.dto.compilation.UpdateCompilationRequest;
 import ru.practicum.explorewithme.dto.event.EventFullDto;
+import ru.practicum.explorewithme.dto.event.EventRequestStatusUpdateRequest;
+import ru.practicum.explorewithme.dto.event.EventRequestStatusUpdateResultDto;
 import ru.practicum.explorewithme.dto.event.EventShortDto;
 import ru.practicum.explorewithme.dto.event.NewEventRequest;
 import ru.practicum.explorewithme.dto.event.State;
 import ru.practicum.explorewithme.dto.event.StateAction;
-import ru.practicum.explorewithme.dto.event.UpdateEventUserRequest;
+import ru.practicum.explorewithme.dto.event.UpdateEventRequest;
 import ru.practicum.explorewithme.dto.location.LocationDto;
 import ru.practicum.explorewithme.dto.location.LocationRequest;
+import ru.practicum.explorewithme.dto.request.ParticipationRequestDto;
+import ru.practicum.explorewithme.dto.request.Status;
 import ru.practicum.explorewithme.dto.user.NewUserRequest;
 import ru.practicum.explorewithme.dto.user.UserDto;
 import ru.practicum.explorewithme.dto.user.UserShortDto;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+import java.util.List;
 
 import static ru.practicum.explorewithme.dto.validators.DateTimeFormatValidator.FORMATTER;
 
@@ -86,18 +95,18 @@ public class TestData {
                 .build();
     }
 
-    public static UpdateEventUserRequest createUpdateEventUserRequest() {
-        return UpdateEventUserRequest.builder()
+    public static UpdateEventRequest createUpdateEventUserRequest() {
+        return UpdateEventRequest.builder()
                 .title("Тестовый")
                 .annotation(RandomStringUtils.randomAlphabetic(30))
-                .category(1L)
+                .category(2L)
                 .description(RandomStringUtils.randomAlphabetic(30))
-                .eventDate("2024-10-01 12:00:00")
+                .eventDate("2030-10-01 12:01:01")
                 .location(createLocationRequest())
-                .paid(Boolean.TRUE)
+                .paid(Boolean.FALSE)
                 .participantLimit(1)
-                .requestModeration(Boolean.TRUE)
-                .stateAction(StateAction.PUBLISH_EVENT.name())
+                .requestModeration(Boolean.FALSE)
+                .stateAction(StateAction.SEND_TO_REVIEW.name())
                 .build();
     }
 
@@ -107,7 +116,7 @@ public class TestData {
                 .title("Тестовый")
                 .annotation(RandomStringUtils.randomAlphabetic(30))
                 .category(createCategoryDto())
-                .confirmedRequests(1L)
+                .confirmedRequests(1)
                 .createdOn(DATE_TIME)
                 .description(RandomStringUtils.randomAlphabetic(30))
                 .eventDate(DATE_TIME)
@@ -127,11 +136,64 @@ public class TestData {
                 .title("Title")
                 .annotation("Annotation")
                 .category(createCategoryDto())
-                .confirmedRequests(1L)
+                .confirmedRequests(1)
                 .eventDate(DATE_TIME)
                 .initiator(createUserShortDto())
                 .paid(Boolean.TRUE)
                 .views(1L)
+                .build();
+    }
+
+    public static ParticipationRequestDto createRequestDto() {
+        return ParticipationRequestDto.builder()
+                .id(1L)
+                .event(1L)
+                .requester(1L)
+                .created(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS))
+                .status(Status.PENDING)
+                .build();
+    }
+
+    public static EventRequestStatusUpdateRequest createStatusUpdateRequest() {
+        return EventRequestStatusUpdateRequest.builder()
+                .requestIds(List.of(1L, 2L))
+                .status(Status.CONFIRMED.name())
+                .build();
+    }
+
+    public static EventRequestStatusUpdateResultDto createStatusUpdateResultDto() {
+        ParticipationRequestDto rejected = createRequestDto();
+        ParticipationRequestDto confirmed = createRequestDto();
+        rejected.setStatus(Status.REJECTED);
+        confirmed.setStatus(Status.CONFIRMED);
+        return EventRequestStatusUpdateResultDto.builder()
+                .confirmedRequests(List.of(confirmed))
+                .rejectedRequests(List.of(rejected))
+                .build();
+    }
+
+    public static NewCompilationRequest createCompilationRequest() {
+        return NewCompilationRequest.builder()
+                .events(List.of(1L))
+                .pinned(Boolean.TRUE)
+                .title("Мегаподпорка")
+                .build();
+    }
+
+    public static UpdateCompilationRequest createUpdateCompilationRequest() {
+        return UpdateCompilationRequest.builder()
+                .events(List.of(2L))
+                .pinned(Boolean.FALSE)
+                .title("Немегаподборка")
+                .build();
+    }
+
+    public static CompilationDto createCompilationDto() {
+        return CompilationDto.builder()
+                .events(List.of(createEventShortDto()))
+                .id(1L)
+                .pinned(Boolean.TRUE)
+                .title("Просто подборка")
                 .build();
     }
 }
