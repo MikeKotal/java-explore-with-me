@@ -22,7 +22,7 @@ import ru.practicum.explorewithme.gateway.adminapi.categories.CategoryClient;
 public class CategoryGatewayController {
 
     private final CategoryClient categoryClient;
-    public final static String VALIDATION_CAT_ID = "Параметр catId должен быть больше 0";
+    public static final String VALIDATION_CAT_ID = "Параметр catId должен быть больше 0";
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
