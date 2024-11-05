@@ -3,6 +3,7 @@ package ru.practicum.explorewithme.gateway.error.controller;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingRequestValueException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -48,6 +49,17 @@ public class ErrorHandler {
                 .status(HttpStatus.BAD_REQUEST.name())
                 .message(e.getMessage())
                 .reason("Некорректно переданы типы входных параметров")
+                .timestamp(LocalDateTime.now().format(FORMATTER))
+                .build();
+    }
+
+    @ExceptionHandler(MissingRequestValueException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ApiError handleMissingFieldsValidation(final MissingRequestValueException e) {
+        return ApiError.builder()
+                .status(HttpStatus.BAD_REQUEST.name())
+                .message(e.getMessage())
+                .reason("Не переданы обязательные параметры")
                 .timestamp(LocalDateTime.now().format(FORMATTER))
                 .build();
     }

@@ -11,7 +11,7 @@ services:
       - POSTGRES_USER=dbuser
       - POSTGRES_PASSWORD=12345
     healthcheck:
-      test: pg_isready -q -d $$POSTGRES_DB -U $$POSTGRES_USER
+      test: ["CMD-SHELL", "pg_isready -q -d $POSTGRES_DB -U $POSTGRES_USER"]
       timeout: 5s
       interval: 5s
       retries: 10
@@ -28,7 +28,7 @@ services:
       - POSTGRES_USER=dbuser
       - POSTGRES_PASSWORD=54321
     healthcheck:
-      test: pg_isready -q -d $$POSTGRES_DB -U $$POSTGRES_USER
+      test: ["CMD-SHELL", "pg_isready -q -d $POSTGRES_DB -U $POSTGRES_USER"]
       timeout: 5s
       interval: 5s
       retries: 10
@@ -42,7 +42,8 @@ services:
     ports:
       - "9091:9091"
     depends_on:
-      - stats-db
+      stats-db:
+        condition: service_healthy
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://stats-db:5432/stats
       - SPRING_DATASOURCE_USERNAME=dbuser
@@ -70,7 +71,8 @@ services:
     ports:
       - "8081:8081"
     depends_on:
-      - ewm-db
+      ewm-db:
+        condition: service_healthy
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://ewm-db:5432/ewm
       - SPRING_DATASOURCE_USERNAME=dbuser
