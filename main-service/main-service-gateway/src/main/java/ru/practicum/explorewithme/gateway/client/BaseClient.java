@@ -20,35 +20,43 @@ public class BaseClient {
     }
 
     protected ResponseEntity<Object> get(String path) {
-        return makeAndSendRequest(HttpMethod.GET, path, null, null);
+        return makeAndSendRequest(HttpMethod.GET, path, null, null, null);
+    }
+
+    protected ResponseEntity<Object> get(String path, String ip) {
+        return makeAndSendRequest(HttpMethod.GET, path, ip, null, null);
     }
 
     protected ResponseEntity<Object> get(String path, @Nullable Map<String, Object> parameters) {
-        return makeAndSendRequest(HttpMethod.GET, path, parameters, null);
+        return makeAndSendRequest(HttpMethod.GET, path, null, parameters, null);
+    }
+
+    protected ResponseEntity<Object> get(String path, String ip, @Nullable Map<String, Object> parameters) {
+        return makeAndSendRequest(HttpMethod.GET, path, ip, parameters, null);
     }
 
     protected ResponseEntity<Object> post(String path, @Nullable Map<String, Object> parameters) {
-        return makeAndSendRequest(HttpMethod.POST, path, parameters, null);
+        return makeAndSendRequest(HttpMethod.POST, path, null, parameters, null);
     }
 
     protected <T> ResponseEntity<Object> post(String path, T body) {
-        return makeAndSendRequest(HttpMethod.POST, path, null, body);
+        return makeAndSendRequest(HttpMethod.POST, path, null, null, body);
     }
 
     protected ResponseEntity<Object> patch(String path) {
-        return makeAndSendRequest(HttpMethod.PATCH, path, null, null);
+        return makeAndSendRequest(HttpMethod.PATCH, path, null, null, null);
     }
 
     protected <T> ResponseEntity<Object> patch(String path, T body) {
-        return makeAndSendRequest(HttpMethod.PATCH, path, null, body);
+        return makeAndSendRequest(HttpMethod.PATCH, path, null, null, body);
     }
 
     protected void delete(String path) {
-        makeAndSendRequest(HttpMethod.DELETE, path, null, null);
+        makeAndSendRequest(HttpMethod.DELETE, path, null, null, null);
     }
 
-    private <T> ResponseEntity<Object> makeAndSendRequest(HttpMethod method, String path, @Nullable Map<String, Object> parameters, @Nullable T body) {
-        HttpEntity<T> requestEntity = new HttpEntity<>(body, defaultHeaders());
+    private <T> ResponseEntity<Object> makeAndSendRequest(HttpMethod method, String path, String ip, @Nullable Map<String, Object> parameters, @Nullable T body) {
+        HttpEntity<T> requestEntity = new HttpEntity<>(body, defaultHeaders(ip));
 
         ResponseEntity<Object> statsServerResponse;
         try {
@@ -63,10 +71,13 @@ public class BaseClient {
         return prepareGatewayResponse(statsServerResponse);
     }
 
-    private HttpHeaders defaultHeaders() {
+    private HttpHeaders defaultHeaders(String ip) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.setAccept(List.of(MediaType.APPLICATION_JSON));
+        if (ip != null && !ip.isBlank()) {
+            headers.set("X-Forwarded-For", ip);
+        }
         return headers;
     }
 

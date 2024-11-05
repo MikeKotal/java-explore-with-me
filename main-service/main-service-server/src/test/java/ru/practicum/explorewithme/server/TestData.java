@@ -18,6 +18,7 @@ import ru.practicum.explorewithme.dto.location.LocationDto;
 import ru.practicum.explorewithme.dto.location.LocationRequest;
 import ru.practicum.explorewithme.dto.request.ParticipationRequestDto;
 import ru.practicum.explorewithme.dto.request.Status;
+import ru.practicum.explorewithme.dto.stats.ViewStatsDto;
 import ru.practicum.explorewithme.dto.user.NewUserRequest;
 import ru.practicum.explorewithme.dto.user.UserDto;
 import ru.practicum.explorewithme.dto.user.UserShortDto;
@@ -194,6 +195,14 @@ public class TestData {
                 .id(1L)
                 .pinned(Boolean.TRUE)
                 .title("Просто подборка")
+                .build();
+    }
+
+    public static ViewStatsDto createViewStatsDto() {
+        return ViewStatsDto.builder()
+                .app("main-service-server")
+                .uri("/events/1")
+                .hits(10L)
                 .build();
     }
 }

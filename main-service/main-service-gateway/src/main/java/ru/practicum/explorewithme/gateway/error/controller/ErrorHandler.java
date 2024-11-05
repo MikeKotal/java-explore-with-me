@@ -41,6 +41,17 @@ public class ErrorHandler {
                 .build();
     }
 
+    @ExceptionHandler(NumberFormatException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ApiError handleParsingValidation(final NumberFormatException e) {
+        return ApiError.builder()
+                .status(HttpStatus.BAD_REQUEST.name())
+                .message(e.getMessage())
+                .reason("Некорректно переданы типы входных параметров")
+                .timestamp(LocalDateTime.now().format(FORMATTER))
+                .build();
+    }
+
     @ExceptionHandler
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ApiError handleInternalError(final Throwable e) {

@@ -16,6 +16,23 @@ services:
       interval: 5s
       retries: 10
 
+  main-db:
+    image: postgres:16.1
+    container_name: postgres
+    ports:
+      - "5433:5432"
+    volumes:
+      - ./volumes/postgres:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_DB=main
+      - POSTGRES_USER=dbuser
+      - POSTGRES_PASSWORD=54321
+    healthcheck:
+      test: pg_isready -q -d $$POSTGRES_DB -U $$POSTGRES_USER
+      timeout: 5s
+      interval: 5s
+      retries: 10
+
   stats-server:
     build:
       context: ./stats-service/stats-service-server
@@ -43,3 +60,31 @@ services:
       - stats-server
     environment:
       - STATS_SERVER_URL=http://stats-server:9091
+
+  main-server:
+    build:
+      context: ./main-service/main-service-server
+      dockerfile: Dockerfile
+    image: main-server
+    container_name: main-server
+    ports:
+      - "8081:8081"
+    depends_on:
+      - main-db
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://main-db:5433/stats
+      - SPRING_DATASOURCE_USERNAME=dbuser
+      - SPRING_DATASOURCE_PASSWORD=54321
+
+  main-gateway:
+    build:
+      context: ./main-service/main-service-gateway
+      dockerfile: Dockerfile
+    image: main-gateway
+    container_name: main-gateway
+    ports:
+      - "8080:8080"
+    depends_on:
+      - main-server
+    environment:
+      - STATS_SERVER_URL=http://main-server:8081

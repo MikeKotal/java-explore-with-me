@@ -22,6 +22,7 @@ import ru.practicum.explorewithme.gateway.adminapi.categories.CategoryClient;
 public class CategoryGatewayController {
 
     private final CategoryClient categoryClient;
+    public final static String VALIDATION_CAT_ID = "Параметр catId должен быть больше 0";
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -31,13 +32,13 @@ public class CategoryGatewayController {
 
     @PatchMapping("/{catId}")
     public ResponseEntity<Object> updateCategory(@Valid @RequestBody NewCategoryRequest categoryRequest,
-                                                 @PathVariable @Positive(message = "Параметр catId должен быть больше 0") Long catId) {
+                                                 @PathVariable @Positive(message = VALIDATION_CAT_ID) Long catId) {
         return categoryClient.updateCategory(categoryRequest, catId);
     }
 
     @DeleteMapping("/{catId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteCategory(@PathVariable @Positive(message = "Параметр catId должен быть больше 0") Long catId) {
+    public void deleteCategory(@PathVariable @Positive(message = VALIDATION_CAT_ID) Long catId) {
         categoryClient.deleteCategory(catId);
     }
 }
