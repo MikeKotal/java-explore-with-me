@@ -23,7 +23,6 @@ import ru.practicum.explorewithme.dto.user.UserDto;
 import ru.practicum.explorewithme.dto.user.UserShortDto;
 
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 import static ru.practicum.explorewithme.dto.validators.DateTimeFormatValidator.FORMATTER;
@@ -149,7 +148,7 @@ public class TestData {
                 .id(1L)
                 .event(1L)
                 .requester(1L)
-                .created(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS))
+                .created(DATE_TIME)
                 .status(Status.PENDING)
                 .build();
     }

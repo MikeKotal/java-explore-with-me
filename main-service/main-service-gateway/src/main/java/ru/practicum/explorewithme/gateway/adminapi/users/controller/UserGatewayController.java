@@ -1,7 +1,6 @@
 package ru.practicum.explorewithme.gateway.adminapi.users.controller;
 
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -41,7 +40,7 @@ public class UserGatewayController {
 
     @DeleteMapping("/{userId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteUser(@PathVariable @Positive(message = "Параметр userId должен быть больше нуля") Long userId) {
+    public void deleteUser(@PathVariable Long userId) {
         userClient.deleteUser(userId);
     }
 }

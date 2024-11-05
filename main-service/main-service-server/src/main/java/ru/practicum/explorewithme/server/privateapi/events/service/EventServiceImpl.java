@@ -200,7 +200,9 @@ public class EventServiceImpl implements EventService {
     }
 
     private void checkFutureEventDateTime(String eventDate) {
-        if (LocalDateTime.parse(eventDate, FORMATTER).isBefore(LocalDateTime.now().plusHours(2))) {
+        LocalDateTime currentTime = LocalDateTime.now().plusHours(2);
+        if (!LocalDateTime.parse(eventDate, FORMATTER).isEqual(currentTime) &&
+                !LocalDateTime.parse(eventDate, FORMATTER).isAfter(currentTime)) {
             log.error("Время события некорректно");
             throw new ConditionException("Дата и время не может быть раньше, чем через два часа от текущего момента");
         }

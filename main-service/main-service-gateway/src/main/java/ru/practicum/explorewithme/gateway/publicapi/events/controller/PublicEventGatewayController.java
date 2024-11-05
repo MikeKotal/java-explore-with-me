@@ -1,7 +1,6 @@
 package ru.practicum.explorewithme.gateway.publicapi.events.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,8 +11,6 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.practicum.explorewithme.gateway.publicapi.events.PublicEventClient;
 
 import java.util.List;
-
-import static ru.practicum.explorewithme.gateway.privateapi.events.controller.EventGatewayController.VALIDATION_EVENT_ID;
 
 @RestController
 @RequiredArgsConstructor
@@ -37,7 +34,7 @@ public class PublicEventGatewayController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Object> getEventByIdByPublicUser(@PathVariable @Positive(message = VALIDATION_EVENT_ID) Long id,
+    public ResponseEntity<Object> getEventByIdByPublicUser(@PathVariable Long id,
                                                            HttpServletRequest request) {
         return publicEventClient.getEventByIdByPublicUser(id, request);
     }

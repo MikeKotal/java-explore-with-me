@@ -1,7 +1,6 @@
 package ru.practicum.explorewithme.gateway.adminapi.compilations.controller;
 
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +22,6 @@ import ru.practicum.explorewithme.gateway.adminapi.compilations.CompilationClien
 public class CompilationGatewayController {
 
     private final CompilationClient compilationClient;
-    public static final String VALIDATION_COMP_ID = "Идентификатор подюорки должен быть больше нуля";
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -32,14 +30,14 @@ public class CompilationGatewayController {
     }
 
     @PatchMapping("/{compId}")
-    public ResponseEntity<Object> updateCompilation(@PathVariable @Positive(message = VALIDATION_COMP_ID) Long compId,
+    public ResponseEntity<Object> updateCompilation(@PathVariable Long compId,
                                                     @RequestBody @Valid UpdateCompilationRequest updateCompilationRequest) {
         return compilationClient.updateCompilation(compId, updateCompilationRequest);
     }
 
     @DeleteMapping("/{compId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteCompilation(@PathVariable @Positive(message = VALIDATION_COMP_ID) Long compId) {
+    public void deleteCompilation(@PathVariable Long compId) {
         compilationClient.deleteCompilation(compId);
     }
 }
