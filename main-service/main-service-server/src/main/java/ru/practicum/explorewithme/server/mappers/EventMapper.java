@@ -89,7 +89,7 @@ public class EventMapper {
     public static Event mapToUpdatedEvent(UpdateEventRequest updateRequest, Category newCategory, Event oldEvent) {
         log.info("Новое событие: {} и старое событие: {} в маппер", updateRequest, oldEvent);
         State newState = oldEvent.getState();
-        if(updateRequest.getStateAction() != null) {
+        if (updateRequest.getStateAction() != null) {
             switch (StateAction.valueOf(updateRequest.getStateAction())) {
                 case SEND_TO_REVIEW -> newState = State.PENDING;
                 case REJECT_EVENT, CANCEL_REVIEW -> newState = State.CANCELED;
