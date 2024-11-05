@@ -85,6 +85,6 @@ services:
     ports:
       - "8080:8080"
     depends_on:
-      - ewm-server
+      - ewm-service
     environment:
-      - MAIN_SERVER_URL=http://ewm-server:8081/
+      - MAIN_SERVER_URL=http://ewm-service:8081/
