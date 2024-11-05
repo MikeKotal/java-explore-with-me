@@ -14,6 +14,7 @@ import org.springframework.data.domain.Sort;
 import ru.practicum.explorewithme.dto.event.EventRequestStatusUpdateRequest;
 import ru.practicum.explorewithme.dto.event.NewEventRequest;
 import ru.practicum.explorewithme.dto.event.State;
+import ru.practicum.explorewithme.dto.event.StateAction;
 import ru.practicum.explorewithme.dto.event.UpdateEventRequest;
 import ru.practicum.explorewithme.dto.location.LocationRequest;
 import ru.practicum.explorewithme.dto.request.Status;
@@ -152,6 +153,7 @@ public class EventServiceImplTest {
         when(userRepository.existsById(anyLong())).thenReturn(Boolean.TRUE);
         when(eventRepository.findById(anyLong())).thenReturn(Optional.of(event));
         when(eventUserRequest.getCategory()).thenReturn(1L);
+        when(eventUserRequest.getStateAction()).thenReturn(StateAction.SEND_TO_REVIEW.name());
         when(eventUserRequest.getEventDate()).thenReturn(LocalDateTime.now().plusDays(1L).format(FORMATTER));
         when(categoryRepository.findById(1L)).thenReturn(Optional.of(category));
         when(event.getState()).thenReturn(State.PENDING);
@@ -175,6 +177,7 @@ public class EventServiceImplTest {
     public void checkExceptionUpdateWithInvalidStatus() {
         when(userRepository.existsById(anyLong())).thenReturn(Boolean.TRUE);
         when(eventRepository.findById(anyLong())).thenReturn(Optional.of(event));
+        when(eventUserRequest.getStateAction()).thenReturn(StateAction.SEND_TO_REVIEW.name());
         when(eventUserRequest.getCategory()).thenReturn(null);
         when(event.getCategory()).thenReturn(category);
         when(event.getState()).thenReturn(State.PUBLISHED);
@@ -191,6 +194,7 @@ public class EventServiceImplTest {
         when(userRepository.existsById(anyLong())).thenReturn(Boolean.TRUE);
         when(eventRepository.findById(anyLong())).thenReturn(Optional.of(event));
         when(eventUserRequest.getCategory()).thenReturn(null);
+        when(eventUserRequest.getStateAction()).thenReturn(StateAction.SEND_TO_REVIEW.name());
         when(event.getCategory()).thenReturn(category);
         when(event.getState()).thenReturn(State.CANCELED);
         when(event.getInitiator()).thenReturn(initiator);

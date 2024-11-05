@@ -1,11 +1,11 @@
 services:
   stats-db:
     image: postgres:16.1
-    container_name: postgres
+    container_name: postgres-stats
     ports:
       - "5432:5432"
     volumes:
-      - ./volumes/postgres:/var/lib/postgresql/data/
+      - ./volumes/stats-postgres:/var/lib/postgresql/data/
     environment:
       - POSTGRES_DB=stats
       - POSTGRES_USER=dbuser
@@ -18,11 +18,11 @@ services:
 
   main-db:
     image: postgres:16.1
-    container_name: postgres
+    container_name: postgres-main
     ports:
       - "5433:5432"
     volumes:
-      - ./volumes/postgres:/var/lib/postgresql/data/
+      - ./volumes/main-postgres:/var/lib/postgresql/data/
     environment:
       - POSTGRES_DB=main
       - POSTGRES_USER=dbuser
@@ -72,7 +72,7 @@ services:
     depends_on:
       - main-db
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://main-db:5433/stats
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://main-db:5432/main
       - SPRING_DATASOURCE_USERNAME=dbuser
       - SPRING_DATASOURCE_PASSWORD=54321
 
@@ -87,4 +87,4 @@ services:
     depends_on:
       - main-server
     environment:
-      - STATS_SERVER_URL=http://main-server:8081
+      - MAIN_SERVER_URL=http://main-server:8081/

@@ -120,7 +120,7 @@ public class UserGatewayControllerTest {
 
     @Test
     public void checkUserInvalidEmailError() throws Exception {
-        NewUserRequest userRequest = new NewUserRequest("super", "Имя");
+        NewUserRequest userRequest = new NewUserRequest("superpuper", "Имя");
 
         mockMvc.perform(post("/admin/users")
                         .content(mapper.writeValueAsString(userRequest))

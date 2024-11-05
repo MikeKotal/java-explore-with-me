@@ -35,7 +35,7 @@ public class TestData {
 
     public static NewUserRequest createNewUserRequest() {
         return NewUserRequest.builder()
-                .email("test@test.ru")
+                .email("test@test.com")
                 .name("Имя")
                 .build();
     }
