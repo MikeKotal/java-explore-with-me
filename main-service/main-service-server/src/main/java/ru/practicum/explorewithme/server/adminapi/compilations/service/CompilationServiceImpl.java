@@ -28,7 +28,7 @@ public class CompilationServiceImpl implements CompilationService {
 
     private final CompilationRepository compilationRepository;
     private final EventRepository eventRepository;
-    public static Sort ORDER_BY_EVENT_DAY = Sort.by(Sort.Direction.ASC, "eventDate");
+    public static final Sort ORDER_BY_EVENT_DAY = Sort.by(Sort.Direction.ASC, "eventDate");
 
     @Override
     public CompilationDto createCompilation(NewCompilationRequest compilationRequest) {
