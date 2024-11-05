@@ -16,15 +16,15 @@ services:
       interval: 5s
       retries: 10
 
-  main-db:
+  ewm-db:
     image: postgres:16.1
-    container_name: postgres-main
+    container_name: postgres-ewm
     ports:
       - "5433:5432"
     volumes:
-      - ./volumes/main-postgres:/var/lib/postgresql/data/
+      - ./volumes/ewm-postgres:/var/lib/postgresql/data/
     environment:
-      - POSTGRES_DB=main
+      - POSTGRES_DB=ewm
       - POSTGRES_USER=dbuser
       - POSTGRES_PASSWORD=54321
     healthcheck:
@@ -61,30 +61,30 @@ services:
     environment:
       - STATS_SERVER_URL=http://stats-server:9091
 
-  main-server:
+  ewm-service:
     build:
       context: ./main-service/main-service-server
       dockerfile: Dockerfile
-    image: main-server
-    container_name: main-server
+    image: ewm-service
+    container_name: ewm-service
     ports:
       - "8081:8081"
     depends_on:
-      - main-db
+      - ewm-db
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://main-db:5432/main
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://ewm-db:5432/ewm
       - SPRING_DATASOURCE_USERNAME=dbuser
       - SPRING_DATASOURCE_PASSWORD=54321
 
-  main-gateway:
+  ewm-gateway:
     build:
       context: ./main-service/main-service-gateway
       dockerfile: Dockerfile
-    image: main-gateway
-    container_name: main-gateway
+    image: ewm-gateway
+    container_name: ewm-gateway
     ports:
       - "8080:8080"
     depends_on:
-      - main-server
+      - ewm-server
     environment:
-      - MAIN_SERVER_URL=http://main-server:8081/
+      - MAIN_SERVER_URL=http://ewm-server:8081/
