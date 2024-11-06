@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.HandlerMethodValidationException;
 import ru.practicum.explorewithme.gateway.error.model.ApiError;
+import ru.practicum.explorewithme.gateway.exceptions.ValidationException;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -27,6 +28,17 @@ public class ErrorHandler {
                 .status(HttpStatus.BAD_REQUEST.name())
                 .message(Objects.requireNonNull(e.getBindingResult().getFieldError()).getDefaultMessage())
                 .reason("Некорректно заполнены входные параметры")
+                .timestamp(LocalDateTime.now().format(FORMATTER))
+                .build();
+    }
+
+    @ExceptionHandler(ValidationException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ApiError handleRequestValidation(final ValidationException e) {
+        return ApiError.builder()
+                .status(HttpStatus.BAD_REQUEST.name())
+                .message(e.getMessage())
+                .reason("Запрос сформирован некорректно")
                 .timestamp(LocalDateTime.now().format(FORMATTER))
                 .build();
     }

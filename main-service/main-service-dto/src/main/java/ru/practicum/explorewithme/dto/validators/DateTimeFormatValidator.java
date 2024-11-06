@@ -19,6 +19,9 @@ public class DateTimeFormatValidator implements ConstraintValidator<ValidDateTim
 
     @Override
     public boolean isValid(String s, ConstraintValidatorContext constraintValidatorContext) {
+        if (s == null) {
+            return true;
+        }
         try {
             LocalDateTime.parse(s, FORMATTER);
             return true;

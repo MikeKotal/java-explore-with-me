@@ -15,7 +15,6 @@ import ru.practicum.explorewithme.dto.event.EventShortDto;
 import ru.practicum.explorewithme.dto.event.SortType;
 import ru.practicum.explorewithme.dto.event.State;
 import ru.practicum.explorewithme.dto.stats.ViewStatsDto;
-import ru.practicum.explorewithme.server.exceptions.ConditionException;
 import ru.practicum.explorewithme.server.exceptions.NotFoundException;
 import ru.practicum.explorewithme.server.exceptions.ValidationException;
 import ru.practicum.explorewithme.server.mappers.EndpointHitRequestMapper;
@@ -85,7 +84,7 @@ public class PublicEventServiceImpl implements PublicEventService {
                     return new NotFoundException(String.format("События с идентификатором = '%s' не найдено", id));
                 });
         if (!event.getState().equals(State.PUBLISHED)) {
-            throw new ConditionException("Можно просматривать только опубликованные события");
+            throw new NotFoundException("Можно просматривать только опубликованные события");
         }
         statsGatewayClient.post(EndpointHitRequestMapper.mapToEndpointHitRequest(request, ip));
         List<ViewStatsDto> stats = getStats(event);

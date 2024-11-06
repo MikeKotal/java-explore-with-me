@@ -17,7 +17,6 @@ import ru.practicum.explorewithme.dto.event.SortType;
 import ru.practicum.explorewithme.dto.event.State;
 import ru.practicum.explorewithme.server.adminapi.categories.model.Category;
 import ru.practicum.explorewithme.server.adminapi.users.model.User;
-import ru.practicum.explorewithme.server.exceptions.ConditionException;
 import ru.practicum.explorewithme.server.exceptions.NotFoundException;
 import ru.practicum.explorewithme.server.exceptions.ValidationException;
 import ru.practicum.explorewithme.server.privateapi.events.dao.EventRepository;
@@ -151,7 +150,7 @@ public class PublicEventServiceImplTest {
     public void checkInvalidStateEventValidation() {
         when(eventRepository.findById(anyLong())).thenReturn(Optional.of(event));
         when(event.getState()).thenReturn(State.CANCELED);
-        ConditionException exception = Assertions.assertThrows(ConditionException.class,
+        NotFoundException exception = Assertions.assertThrows(NotFoundException.class,
                 () -> publicEventService.getEventByIdByPublicUser(1L, "1:1:1:1", new MockHttpServletRequest()));
 
         String expectedMessage = "Можно просматривать только опубликованные события";

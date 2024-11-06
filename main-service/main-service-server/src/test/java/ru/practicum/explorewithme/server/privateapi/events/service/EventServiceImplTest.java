@@ -153,7 +153,8 @@ public class EventServiceImplTest {
 
     @Test
     public void checkEventTimeValidation() {
-        when(newEventRequest.getEventDate()).thenReturn(LocalDateTime.now().plusHours(2).minusSeconds(1)
+        when(newEventRequest.getEventDate())
+                .thenReturn(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES).plusHours(2).minusMinutes(1)
                 .truncatedTo(ChronoUnit.SECONDS).format(FORMATTER));
         ValidationException exception = Assertions.assertThrows(ValidationException.class,
                 () -> eventService.createEvent(1L, newEventRequest));
