@@ -26,6 +26,7 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyMap;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static ru.practicum.explorewithme.server.TestData.createViewStatsDto;
@@ -71,7 +72,7 @@ public class PublicEventServiceIntegrationTest {
     @Test
     public void checkSuccessGetEventByIdAndPublicUser() {
         doNothing().when(statsGatewayClient).post(any());
-        when(statsGatewayClient.get(anyMap())).thenReturn(new ResponseEntity<>(List.of(createViewStatsDto()),
+        when(statsGatewayClient.get(anyString(), anyMap())).thenReturn(new ResponseEntity<>(List.of(createViewStatsDto()),
                 HttpStatusCode.valueOf(200)));
 
         EventFullDto eventFullDto

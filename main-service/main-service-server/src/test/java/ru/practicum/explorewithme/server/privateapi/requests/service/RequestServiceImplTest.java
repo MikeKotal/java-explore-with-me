@@ -62,6 +62,7 @@ public class RequestServiceImplTest {
         when(event.getState()).thenReturn(State.PUBLISHED);
         when(event.getConfirmedRequests()).thenReturn(1);
         when(event.getParticipantLimit()).thenReturn(2);
+        when(event.getRequestModeration()).thenReturn(Boolean.TRUE);
         when(request.getEvent()).thenReturn(event);
         when(request.getRequester()).thenReturn(requester);
         when(requestRepository.save(any())).thenReturn(request);
@@ -71,6 +72,56 @@ public class RequestServiceImplTest {
                 .existsByRequesterIdAndEventId(anyLong(), anyLong());
         Mockito.verify(userRepository, Mockito.times(1)).findById(anyLong());
         Mockito.verify(eventRepository, Mockito.times(1)).findById(anyLong());
+        Mockito.verify(requestRepository, Mockito.times(1)).save(any());
+    }
+
+    @Test
+    public void checkCreateRequestWithAutoApprove() {
+        when(requestRepository.existsByRequesterIdAndEventId(anyLong(), anyLong())).thenReturn(Boolean.FALSE);
+        when(userRepository.findById(anyLong())).thenReturn(Optional.of(requester));
+        when(eventRepository.findById(anyLong())).thenReturn(Optional.of(event));
+        when(event.getInitiator()).thenReturn(requester);
+        when(requester.getId()).thenReturn(2L);
+        when(event.getState()).thenReturn(State.PUBLISHED);
+        when(event.getConfirmedRequests()).thenReturn(0);
+        when(event.getParticipantLimit()).thenReturn(0);
+        when(event.getRequestModeration()).thenReturn(Boolean.TRUE);
+        when(request.getEvent()).thenReturn(event);
+        when(eventRepository.save(any())).thenReturn(event);
+        when(request.getRequester()).thenReturn(requester);
+        when(requestRepository.save(any())).thenReturn(request);
+        requestService.createRequest(1L, 1L);
+
+        Mockito.verify(requestRepository, Mockito.times(1))
+                .existsByRequesterIdAndEventId(anyLong(), anyLong());
+        Mockito.verify(userRepository, Mockito.times(1)).findById(anyLong());
+        Mockito.verify(eventRepository, Mockito.times(1)).findById(anyLong());
+        Mockito.verify(eventRepository, Mockito.times(1)).save(any());
+        Mockito.verify(requestRepository, Mockito.times(1)).save(any());
+    }
+
+    @Test
+    public void checkAutoRejectRequest() {
+        when(requestRepository.existsByRequesterIdAndEventId(anyLong(), anyLong())).thenReturn(Boolean.FALSE);
+        when(userRepository.findById(anyLong())).thenReturn(Optional.of(requester));
+        when(eventRepository.findById(anyLong())).thenReturn(Optional.of(event));
+        when(event.getInitiator()).thenReturn(requester);
+        when(requester.getId()).thenReturn(2L);
+        when(event.getState()).thenReturn(State.PUBLISHED);
+        when(event.getConfirmedRequests()).thenReturn(0);
+        when(event.getParticipantLimit()).thenReturn(0);
+        when(event.getRequestModeration()).thenReturn(Boolean.TRUE);
+        when(request.getEvent()).thenReturn(event);
+        when(eventRepository.save(any())).thenReturn(event);
+        when(request.getRequester()).thenReturn(requester);
+        when(requestRepository.save(any())).thenReturn(request);
+        requestService.createRequest(1L, 1L);
+
+        Mockito.verify(requestRepository, Mockito.times(1))
+                .existsByRequesterIdAndEventId(anyLong(), anyLong());
+        Mockito.verify(userRepository, Mockito.times(1)).findById(anyLong());
+        Mockito.verify(eventRepository, Mockito.times(1)).findById(anyLong());
+        Mockito.verify(eventRepository, Mockito.times(1)).save(any());
         Mockito.verify(requestRepository, Mockito.times(1)).save(any());
     }
 
@@ -127,13 +178,13 @@ public class RequestServiceImplTest {
     public void checkGetRequestsByUserId() {
         Sort orderByCreated = Sort.by(Sort.Direction.DESC, "created");
         when(userRepository.findById(anyLong())).thenReturn(Optional.of(requester));
-        when(requestRepository.findAllById(1L, orderByCreated)).thenReturn(List.of(request));
+        when(requestRepository.findAllByRequesterId(1L, orderByCreated)).thenReturn(List.of(request));
         when(request.getEvent()).thenReturn(event);
         when(request.getRequester()).thenReturn(requester);
         requestService.getRequestsByUserId(1L);
 
         Mockito.verify(userRepository, Mockito.times(1)).findById(anyLong());
-        Mockito.verify(requestRepository, Mockito.times(1)).findAllById(1L, orderByCreated);
+        Mockito.verify(requestRepository, Mockito.times(1)).findAllByRequesterId(1L, orderByCreated);
     }
 
     @Test
@@ -172,7 +223,7 @@ public class RequestServiceImplTest {
         when(requestRepository.findById(anyLong())).thenReturn(Optional.of(request));
         when(request.getRequester()).thenReturn(requester);
         when(requester.getId()).thenReturn(1L);
-        when(request.getStatus()).thenReturn(Status.REJECTED);
+        when(request.getStatus()).thenReturn(Status.CANCELED);
 
         ConditionException exception = Assertions.assertThrows(ConditionException.class,
                 () -> requestService.cancelRequest(1L, 1L));

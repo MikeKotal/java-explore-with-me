@@ -14,6 +14,6 @@ public class StatusValidator implements ConstraintValidator<ValidStatus, String>
 
     @Override
     public boolean isValid(String s, ConstraintValidatorContext constraintValidatorContext) {
-        return s.equals(Status.CONFIRMED.name()) || s.equals(Status.REJECTED.name());
+        return s.equals(Status.CONFIRMED.name()) || s.equals(Status.CANCELED.name());
     }
 }

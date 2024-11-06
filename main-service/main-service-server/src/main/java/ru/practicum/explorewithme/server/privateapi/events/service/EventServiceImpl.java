@@ -66,7 +66,7 @@ public class EventServiceImpl implements EventService {
     public List<EventShortDto> getEventsByUserId(Long userId, Integer from, Integer size) {
         log.info("Получение событий пользователя {}, с элемента from {} размера выборки size {}", userId, from, size);
         Pageable pageable = PageRequest.of(from > 0 ? from / size : 0, size);
-        List<Event> events = eventRepository.findAllById(userId, pageable);
+        List<Event> events = eventRepository.findAllByInitiatorId(userId, pageable);
         log.info("Список событий {}", events);
         return events.stream()
                 .map(EventMapper::mapToEventShortDto)
@@ -152,7 +152,7 @@ public class EventServiceImpl implements EventService {
         if (event.getParticipantLimit() == 0 || !event.getRequestModeration()
                 || Status.valueOf(statusUpdateRequest.getStatus()).equals(Status.REJECTED)) {
             requests = requestRepository.saveAll(requests.stream()
-                    .peek(request -> request.setStatus(Status.valueOf(statusUpdateRequest.getStatus())))
+                    .peek(request -> request.setStatus(Status.REJECTED))
                     .toList());
         } else {
             requests = requests.stream()
@@ -163,7 +163,7 @@ public class EventServiceImpl implements EventService {
                             event.setConfirmedRequests(event.getConfirmedRequests() + 1);
                             return request;
                         } else {
-                            request.setStatus(Status.REJECTED);
+                            request.setStatus(Status.CANCELED);
                             return requestRepository.save(request);
                         }
                     }).toList();

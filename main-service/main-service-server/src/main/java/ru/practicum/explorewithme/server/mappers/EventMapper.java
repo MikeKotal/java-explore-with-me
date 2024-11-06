@@ -93,7 +93,10 @@ public class EventMapper {
             switch (StateAction.valueOf(updateRequest.getStateAction())) {
                 case SEND_TO_REVIEW -> newState = State.PENDING;
                 case REJECT_EVENT, CANCEL_REVIEW -> newState = State.CANCELED;
-                case PUBLISH_EVENT -> newState = State.PUBLISHED;
+                case PUBLISH_EVENT -> {
+                    newState = State.PUBLISHED;
+                    oldEvent.setPublishedOn(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));
+                }
             }
         }
         oldEvent.setTitle(updateRequest.getTitle() == null ? oldEvent.getTitle() : updateRequest.getTitle());

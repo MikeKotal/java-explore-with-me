@@ -122,7 +122,7 @@ public class PublicEventServiceImplTest {
         doNothing().when(statsGatewayClient).post(any());
         when(event.getId()).thenReturn(1L);
         when(event.getCreatedOn()).thenReturn(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));
-        when(statsGatewayClient.get(anyMap())).thenReturn(new ResponseEntity<>(List.of(createViewStatsDto()),
+        when(statsGatewayClient.get(anyString(), anyMap())).thenReturn(new ResponseEntity<>(List.of(createViewStatsDto()),
                 HttpStatusCode.valueOf(200)));
         when(eventRepository.save(any())).thenReturn(event);
         when(event.getCategory()).thenReturn(category);
@@ -132,7 +132,7 @@ public class PublicEventServiceImplTest {
 
         Mockito.verify(eventRepository, Mockito.times(1)).findById(1L);
         Mockito.verify(statsGatewayClient, Mockito.times(1)).post(any());
-        Mockito.verify(statsGatewayClient, Mockito.times(1)).get(anyMap());
+        Mockito.verify(statsGatewayClient, Mockito.times(1)).get(anyString(), anyMap());
         Mockito.verify(eventRepository, Mockito.times(1)).save(any());
     }
 

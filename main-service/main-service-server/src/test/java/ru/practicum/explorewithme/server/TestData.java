@@ -165,7 +165,7 @@ public class TestData {
     public static EventRequestStatusUpdateResultDto createStatusUpdateResultDto() {
         ParticipationRequestDto rejected = createRequestDto();
         ParticipationRequestDto confirmed = createRequestDto();
-        rejected.setStatus(Status.REJECTED);
+        rejected.setStatus(Status.CANCELED);
         confirmed.setStatus(Status.CONFIRMED);
         return EventRequestStatusUpdateResultDto.builder()
                 .confirmedRequests(List.of(confirmed))

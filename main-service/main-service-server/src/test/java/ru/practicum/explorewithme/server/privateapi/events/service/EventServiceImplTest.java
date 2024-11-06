@@ -112,13 +112,13 @@ public class EventServiceImplTest {
 
     @Test
     public void checkGetEventsByUserId() {
-        when(eventRepository.findAllById(anyLong(), any(Pageable.class))).thenReturn(List.of(event));
+        when(eventRepository.findAllByInitiatorId(anyLong(), any(Pageable.class))).thenReturn(List.of(event));
         when(event.getCategory()).thenReturn(category);
         when(event.getInitiator()).thenReturn(initiator);
         eventService.getEventsByUserId(1L, 0, 10);
 
         Mockito.verify(eventRepository, Mockito.times(1))
-                .findAllById(anyLong(), any(Pageable.class));
+                .findAllByInitiatorId(anyLong(), any(Pageable.class));
     }
 
     @Test
@@ -323,7 +323,7 @@ public class EventServiceImplTest {
         when(event.getConfirmedRequests()).thenReturn(2);
         when(statusUpdateRequest.getRequestIds()).thenReturn(List.of(1L));
         when(requestRepository.findRequestsByIdIn(anyList())).thenReturn(List.of(request));
-        when(request.getStatus()).thenReturn(Status.REJECTED);
+        when(request.getStatus()).thenReturn(Status.CANCELED);
 
         ConditionException exception = Assertions.assertThrows(ConditionException.class,
                 () -> eventService.approveRequestByOwnerId(1L, 1L, statusUpdateRequest));

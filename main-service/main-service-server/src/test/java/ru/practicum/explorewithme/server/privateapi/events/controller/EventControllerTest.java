@@ -92,7 +92,7 @@ public class EventControllerTest {
                 .andExpect(jsonPath("$[0].annotation", is(eventShortDto.getAnnotation()), String.class))
                 .andExpect(jsonPath("$[0].category", is(eventShortDto.getCategory()), CategoryDto.class))
                 .andExpect(jsonPath("$[0].confirmedRequests", is(eventShortDto.getConfirmedRequests()), Integer.class))
-                .andExpect(jsonPath("$[0].eventDate", is(eventShortDto.getEventDate().toString()), String.class))
+                .andExpect(jsonPath("$[0].eventDate", is(eventShortDto.getEventDate()), String.class))
                 .andExpect(jsonPath("$[0].initiator", is(eventShortDto.getInitiator()), UserShortDto.class))
                 .andExpect(jsonPath("$[0].paid", is(eventShortDto.getPaid()), Boolean.class))
                 .andExpect(jsonPath("$[0].views", is(eventShortDto.getViews()), Long.class));
@@ -169,7 +169,7 @@ public class EventControllerTest {
                 .andExpect(jsonPath("$.confirmedRequests", notNullValue()))
                 .andExpect(jsonPath("$.confirmedRequests[0].status", is(Status.CONFIRMED.name()), String.class))
                 .andExpect(jsonPath("$.rejectedRequests", notNullValue()))
-                .andExpect(jsonPath("$.rejectedRequests[0].status", is(Status.REJECTED.name()), String.class));
+                .andExpect(jsonPath("$.rejectedRequests[0].status", is(Status.CANCELED.name()), String.class));
     }
 
     private void checkEventFullDtoResponse(ResultActions resultActions, EventFullDto eventFullDto) throws Exception {
@@ -179,13 +179,13 @@ public class EventControllerTest {
                 .andExpect(jsonPath("$.annotation", is(eventFullDto.getAnnotation()), String.class))
                 .andExpect(jsonPath("$.category", is(eventFullDto.getCategory()), CategoryDto.class))
                 .andExpect(jsonPath("$.confirmedRequests", is(eventFullDto.getConfirmedRequests()), Integer.class))
-                .andExpect(jsonPath("$.createdOn", is(eventFullDto.getCreatedOn().toString()), String.class))
+                .andExpect(jsonPath("$.createdOn", is(eventFullDto.getCreatedOn()), String.class))
                 .andExpect(jsonPath("$.description", is(eventFullDto.getDescription()), String.class))
-                .andExpect(jsonPath("$.eventDate", is(eventFullDto.getEventDate().toString()), String.class))
+                .andExpect(jsonPath("$.eventDate", is(eventFullDto.getEventDate()), String.class))
                 .andExpect(jsonPath("$.location", is(eventFullDto.getLocation()), LocationDto.class))
                 .andExpect(jsonPath("$.paid", is(eventFullDto.getPaid()), Boolean.class))
                 .andExpect(jsonPath("$.participantLimit", is(eventFullDto.getParticipantLimit()), Integer.class))
-                .andExpect(jsonPath("$.publishedOn", is(eventFullDto.getPublishedOn().toString()), String.class))
+                .andExpect(jsonPath("$.publishedOn", is(eventFullDto.getPublishedOn()), String.class))
                 .andExpect(jsonPath("$.requestModeration", is(eventFullDto.getRequestModeration()), Boolean.class))
                 .andExpect(jsonPath("$.state", is(eventFullDto.getState().name()), String.class))
                 .andExpect(jsonPath("$.views", is(eventFullDto.getViews()), Long.class));

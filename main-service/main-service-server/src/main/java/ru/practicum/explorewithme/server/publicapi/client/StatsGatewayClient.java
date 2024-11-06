@@ -31,16 +31,16 @@ public class StatsGatewayClient {
     private String statsUrl;
 
     @Autowired
-    public StatsGatewayClient(@Value("${stats-gateway.url}") String statsUrl,
+    public StatsGatewayClient(@Value("${stats-gateway.url}") String stats,
                               RestTemplateBuilder builder) {
         this.rest = builder
-                .uriTemplateHandler(new DefaultUriBuilderFactory(statsUrl))
+                .uriTemplateHandler(new DefaultUriBuilderFactory(stats))
                 .requestFactory(() -> new HttpComponentsClientHttpRequestFactory())
                 .build();
     }
 
-    public ResponseEntity<Object> get(@NonNull Map<String, Object> parameters) {
-        return makeAndSendRequest(HttpMethod.GET, statsUrl, parameters, null);
+    public ResponseEntity<Object> get(String path, @NonNull Map<String, Object> parameters) {
+        return makeAndSendRequest(HttpMethod.GET, statsUrl + path, parameters, null);
     }
 
     public <T> void post(T body) {

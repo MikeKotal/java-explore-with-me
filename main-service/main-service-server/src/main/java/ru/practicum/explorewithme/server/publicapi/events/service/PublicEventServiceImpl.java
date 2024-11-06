@@ -31,6 +31,8 @@ import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Map;
 
+import static ru.practicum.explorewithme.dto.validators.DateTimeFormatValidator.FORMATTER;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -95,13 +97,13 @@ public class PublicEventServiceImpl implements PublicEventService {
     }
 
     public List<ViewStatsDto> getStats(Event event) {
-        List<String> uris = List.of(String.format("/events/%s", event.getId()));
         Map<String, Object> parameters = Map.of(
-                "start", URLEncoder.encode(event.getCreatedOn().toString(), StandardCharsets.UTF_8),
-                "end", URLEncoder.encode(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS).toString(), StandardCharsets.UTF_8),
+                "start", URLEncoder.encode(event.getCreatedOn().minusMinutes(1).format(FORMATTER), StandardCharsets.UTF_8),
+                "end", URLEncoder.encode(LocalDateTime.now().plusMinutes(1).truncatedTo(ChronoUnit.SECONDS).format(FORMATTER),
+                        StandardCharsets.UTF_8),
                 "unique", Boolean.TRUE,
-                "uris", uris);
-        ResponseEntity<Object> responseEntity = statsGatewayClient.get(parameters);
+                "uris", String.format("/events/%s", event.getId()));
+        ResponseEntity<Object> responseEntity = statsGatewayClient.get("?start={start}&end={end}&unique={unique}&uris={uris}",parameters);
         return objectMapper.convertValue(responseEntity.getBody(),
                 objectMapper.getTypeFactory().constructCollectionType(List.class, ViewStatsDto.class));
     }

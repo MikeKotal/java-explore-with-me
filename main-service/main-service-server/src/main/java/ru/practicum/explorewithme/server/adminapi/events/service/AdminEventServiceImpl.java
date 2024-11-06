@@ -69,6 +69,7 @@ public class AdminEventServiceImpl implements AdminEventService {
     }
 
     @Override
+    @Transactional
     public EventFullDto updateEventByAdmin(Long eventId, UpdateEventRequest userRequest) {
         log.info("Запрос от администратора на изменение события {}", eventId);
         Event event = getEventById(eventId);
@@ -81,7 +82,7 @@ public class AdminEventServiceImpl implements AdminEventService {
             throw new ConditionException("Допустимо отклонять события находящиеся не в статусе PUBLISHED");
         }
         if (userRequest.getEventDate() != null) {
-            checkFutureEventDateTime(userRequest.getEventDate(), event.getPublishedOn());
+            checkFutureEventDateTime(userRequest.getEventDate(), event.getEventDate());
         }
         event = eventRepository.save(EventMapper.mapToUpdatedEvent(userRequest, category, event));
         log.info("Обновленное администратором событие: {}", event);

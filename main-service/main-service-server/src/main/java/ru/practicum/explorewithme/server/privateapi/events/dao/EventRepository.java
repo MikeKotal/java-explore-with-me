@@ -13,7 +13,7 @@ import java.util.Set;
 
 public interface EventRepository extends JpaRepository<Event, Long> {
 
-    List<Event> findAllById(Long userId, Pageable pageable);
+    List<Event> findAllByInitiatorId(Long userId, Pageable pageable);
 
     @Query("""
             select e

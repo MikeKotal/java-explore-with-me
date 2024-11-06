@@ -45,10 +45,14 @@ public class RequestServiceImpl implements RequestService {
         if (!event.getState().equals(State.PUBLISHED)) {
             throw new ConditionException("Нельзя участвовать в неопубликованном событии");
         }
-        if (event.getConfirmedRequests().equals(event.getParticipantLimit())) {
+        if (!event.getParticipantLimit().equals(0) && event.getConfirmedRequests().equals(event.getParticipantLimit())) {
             throw new ConditionException("Был достигнут лимит запросов на участие в событии");
         }
-        Request request = requestRepository.save(RequestMapper.mapToRequest(event, requester));
+        Request request = RequestMapper.mapToRequest(event, requester);
+        if (event.getParticipantLimit().equals(0) || (!event.getParticipantLimit().equals(0) && !event.getRequestModeration())) {
+            incrementConfirmationEvent(request, event);
+        }
+        request = requestRepository.save(request);
         log.info("Запрос успешно сохранен: {}", request);
         return RequestMapper.mapToRequestDto(request);
     }
@@ -58,7 +62,7 @@ public class RequestServiceImpl implements RequestService {
         log.info("Запрос от пользователя {} на получение его запросов", userId);
         getUserById(userId);
         Sort orderByCreated = Sort.by(Sort.Direction.DESC, "created");
-        List<Request> requests = requestRepository.findAllById(userId, orderByCreated);
+        List<Request> requests = requestRepository.findAllByRequesterId(userId, orderByCreated);
         log.info("Все запросы пользователя на участия в событиях: {}", requests);
         return requests.stream()
                 .map(RequestMapper::mapToRequestDto)
@@ -74,10 +78,10 @@ public class RequestServiceImpl implements RequestService {
         if (!userId.equals(request.getRequester().getId())) {
             throw new ConditionException("Отменить запрос на участии в событии может только владелец запроса");
         }
-        if (request.getStatus().equals(Status.REJECTED)) {
+        if (request.getStatus().equals(Status.CANCELED)) {
             throw new ConditionException("Событие уже отменено");
         }
-        request.setStatus(Status.REJECTED);
+        request.setStatus(Status.CANCELED);
         request = requestRepository.save(request);
         log.info("Запрос успешно отменен: {}", request);
         return RequestMapper.mapToRequestDto(request);
@@ -106,5 +110,11 @@ public class RequestServiceImpl implements RequestService {
                     return new NotFoundException(String.format("Запроса на участие с идентификатором = '%s' не найдено",
                             requestId));
                 });
+    }
+
+    private void incrementConfirmationEvent(Request request, Event event) {
+        request.setStatus(Status.CONFIRMED);
+        event.setConfirmedRequests(event.getConfirmedRequests() + 1);
+        eventRepository.save(event);
     }
 }

@@ -71,6 +71,6 @@ public class RequestServiceIntegrationTest {
         assertThat(request.getRequester(), notNullValue());
         assertThat(request.getRequester().getId(), equalTo(requestDto.getRequester()));
         assertThat(request.getCreated(), equalTo(requestDto.getCreated()));
-        assertThat(request.getStatus(), equalTo(Status.REJECTED));
+        assertThat(request.getStatus(), equalTo(Status.CANCELED));
     }
 }

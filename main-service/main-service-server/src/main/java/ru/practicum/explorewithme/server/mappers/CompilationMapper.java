@@ -45,6 +45,7 @@ public class CompilationMapper {
                                                      Set<Event> newEvents) {
         log.info("UpdateCompilationRequest в маппер: {}", updateCompilationRequest);
         Compilation compilation = Compilation.builder()
+                .id(oldCompilation.getId())
                 .events(newEvents)
                 .pinned(updateCompilationRequest.getPinned() == null ? oldCompilation.getPinned()
                         : updateCompilationRequest.getPinned())
