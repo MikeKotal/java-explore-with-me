@@ -29,7 +29,7 @@ public class PublicCompilationClient extends BaseClient {
 
     public ResponseEntity<Object> getCompilationsByPublicUser(Boolean pinned, Integer from, Integer size) {
         StringBuilder defaultPath = new StringBuilder()
-                .append("&from={from}")
+                .append("?from={from}")
                 .append("&size={size}");
         Map<String, Object> parameters = new HashMap<>(Map.of(
                 "from", from,

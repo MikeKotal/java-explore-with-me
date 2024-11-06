@@ -2,6 +2,7 @@ package ru.practicum.explorewithme.server.error.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.exception.ConstraintViolationException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -48,6 +49,17 @@ public class ErrorHandler {
                 .status(HttpStatus.CONFLICT.name())
                 .message(e.getMessage())
                 .reason("Нарушение целостности данных")
+                .timestamp(LocalDateTime.now().format(FORMATTER))
+                .build();
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ApiError handleDuplicateException(final DataIntegrityViolationException e) {
+        return ApiError.builder()
+                .status(HttpStatus.CONFLICT.name())
+                .message(e.getMessage())
+                .reason("Попытка создать дубликат")
                 .timestamp(LocalDateTime.now().format(FORMATTER))
                 .build();
     }

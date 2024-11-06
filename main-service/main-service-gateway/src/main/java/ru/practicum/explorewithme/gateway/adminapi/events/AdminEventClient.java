@@ -44,7 +44,8 @@ public class AdminEventClient extends BaseClient {
 
     public ResponseEntity<Object> getEventsByFilter(List<String> users, List<String> states, List<String> categories,
                                                     String rangeStart, String rangeEnd, Integer from, Integer size) {
-        StringBuilder defaultPath = new StringBuilder(eventsUrl)
+        StringBuilder defaultPath = new StringBuilder("/")
+                .append(eventsUrl)
                 .append("?from={from}")
                 .append("&size={size}");
         Map<String, Object> parameters = new HashMap<>(Map.of(

@@ -24,6 +24,7 @@ import ru.practicum.explorewithme.server.adminapi.users.dao.UserRepository;
 import ru.practicum.explorewithme.server.adminapi.users.model.User;
 import ru.practicum.explorewithme.server.exceptions.ConditionException;
 import ru.practicum.explorewithme.server.exceptions.NotFoundException;
+import ru.practicum.explorewithme.server.exceptions.ValidationException;
 import ru.practicum.explorewithme.server.privateapi.events.dao.EventRepository;
 import ru.practicum.explorewithme.server.privateapi.events.model.Event;
 import ru.practicum.explorewithme.server.privateapi.location.model.Location;
@@ -31,6 +32,7 @@ import ru.practicum.explorewithme.server.privateapi.requests.dao.RequestReposito
 import ru.practicum.explorewithme.server.privateapi.requests.model.Request;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -89,7 +91,8 @@ public class EventServiceImplTest {
 
     @Test
     public void checkCreateEvent() {
-        when(newEventRequest.getEventDate()).thenReturn("2030-01-01 00:00:00");
+        when(newEventRequest.getEventDate()).thenReturn(LocalDateTime.now()
+                .truncatedTo(ChronoUnit.SECONDS).plusHours(2).format(FORMATTER));
         when(userRepository.findById(anyLong())).thenReturn(Optional.of(initiator));
         when(categoryRepository.findById(anyLong())).thenReturn(Optional.of(category));
         when(newEventRequest.getLocation()).thenReturn(locationRequest);
@@ -145,6 +148,17 @@ public class EventServiceImplTest {
                 () -> eventService.getEventByUserAndEventId(1L, 1L));
 
         String expectedMessage = "Просматривать полную информацию о событии может только собственник";
+        Assertions.assertEquals(expectedMessage, exception.getMessage(), "Некорректное сообщение об ошибке");
+    }
+
+    @Test
+    public void checkEventTimeValidation() {
+        when(newEventRequest.getEventDate()).thenReturn(LocalDateTime.now().plusHours(2).minusSeconds(1)
+                .truncatedTo(ChronoUnit.SECONDS).format(FORMATTER));
+        ValidationException exception = Assertions.assertThrows(ValidationException.class,
+                () -> eventService.createEvent(1L, newEventRequest));
+
+        String expectedMessage = "Дата и время не может быть раньше, чем через два часа от текущего момента";
         Assertions.assertEquals(expectedMessage, exception.getMessage(), "Некорректное сообщение об ошибке");
     }
 

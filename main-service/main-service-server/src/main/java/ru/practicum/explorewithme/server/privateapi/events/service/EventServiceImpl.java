@@ -23,6 +23,7 @@ import ru.practicum.explorewithme.server.adminapi.users.dao.UserRepository;
 import ru.practicum.explorewithme.server.adminapi.users.model.User;
 import ru.practicum.explorewithme.server.exceptions.ConditionException;
 import ru.practicum.explorewithme.server.exceptions.NotFoundException;
+import ru.practicum.explorewithme.server.exceptions.ValidationException;
 import ru.practicum.explorewithme.server.mappers.EventMapper;
 import ru.practicum.explorewithme.server.mappers.RequestMapper;
 import ru.practicum.explorewithme.server.privateapi.events.dao.EventRepository;
@@ -31,6 +32,7 @@ import ru.practicum.explorewithme.server.privateapi.requests.dao.RequestReposito
 import ru.practicum.explorewithme.server.privateapi.requests.model.Request;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 import static ru.practicum.explorewithme.dto.validators.DateTimeFormatValidator.FORMATTER;
@@ -200,11 +202,10 @@ public class EventServiceImpl implements EventService {
     }
 
     private void checkFutureEventDateTime(String eventDate) {
-        LocalDateTime currentTime = LocalDateTime.now().plusHours(2);
-        if (!LocalDateTime.parse(eventDate, FORMATTER).isEqual(currentTime) &&
-                !LocalDateTime.parse(eventDate, FORMATTER).isAfter(currentTime)) {
+        LocalDateTime currentTime = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS).plusHours(2);
+        if (LocalDateTime.parse(eventDate, FORMATTER).isBefore(currentTime)) {
             log.error("Время события некорректно");
-            throw new ConditionException("Дата и время не может быть раньше, чем через два часа от текущего момента");
+            throw new ValidationException("Дата и время не может быть раньше, чем через два часа от текущего момента");
         }
     }
 
