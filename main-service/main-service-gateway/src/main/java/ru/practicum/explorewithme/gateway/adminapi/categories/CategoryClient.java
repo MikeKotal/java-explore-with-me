@@ -34,7 +34,7 @@ public class CategoryClient extends BaseClient {
         return patch(String.format("/%s", catId), categoryRequest);
     }
 
-    public void deleteCategory(Long catId) {
-        delete(String.format("/%s", catId));
+    public ResponseEntity<Object> deleteCategory(Long catId) {
+        return delete(String.format("/%s", catId));
     }
 }

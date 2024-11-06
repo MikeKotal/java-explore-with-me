@@ -29,7 +29,8 @@ import static ru.practicum.explorewithme.dto.validators.DateTimeFormatValidator.
 
 public class TestData {
 
-    public static LocalDateTime DATE_TIME = LocalDateTime.parse("2024-10-01 12:01:01", FORMATTER);
+    public static String FORMATTED_DATE_TIME = "2030-10-01 12:01:01";
+    public static LocalDateTime DATE_TIME = LocalDateTime.parse(FORMATTED_DATE_TIME, FORMATTER);
 
     public static NewUserRequest createNewUserRequest() {
         return NewUserRequest.builder()
@@ -86,7 +87,7 @@ public class TestData {
                 .annotation(RandomStringUtils.randomAlphabetic(30))
                 .category(1L)
                 .description(RandomStringUtils.randomAlphabetic(30))
-                .eventDate("2024-10-01 12:00:00")
+                .eventDate(FORMATTED_DATE_TIME)
                 .location(createLocationRequest())
                 .paid(Boolean.TRUE)
                 .participantLimit(1)
@@ -100,7 +101,7 @@ public class TestData {
                 .annotation(RandomStringUtils.randomAlphabetic(30))
                 .category(2L)
                 .description(RandomStringUtils.randomAlphabetic(30))
-                .eventDate("2030-10-01 12:01:01")
+                .eventDate(FORMATTED_DATE_TIME)
                 .location(createLocationRequest())
                 .paid(Boolean.FALSE)
                 .participantLimit(1)
@@ -116,13 +117,13 @@ public class TestData {
                 .annotation(RandomStringUtils.randomAlphabetic(30))
                 .category(createCategoryDto())
                 .confirmedRequests(1)
-                .createdOn(DATE_TIME)
+                .createdOn(FORMATTED_DATE_TIME)
                 .description(RandomStringUtils.randomAlphabetic(30))
-                .eventDate(DATE_TIME)
+                .eventDate(FORMATTED_DATE_TIME)
                 .location(createLocationDto())
                 .paid(Boolean.TRUE)
                 .participantLimit(1)
-                .publishedOn(DATE_TIME)
+                .publishedOn(FORMATTED_DATE_TIME)
                 .requestModeration(Boolean.TRUE)
                 .state(State.PUBLISHED)
                 .views(1L)
@@ -136,7 +137,7 @@ public class TestData {
                 .annotation("Annotation")
                 .category(createCategoryDto())
                 .confirmedRequests(1)
-                .eventDate(DATE_TIME)
+                .eventDate(FORMATTED_DATE_TIME)
                 .initiator(createUserShortDto())
                 .paid(Boolean.TRUE)
                 .views(1L)

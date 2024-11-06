@@ -33,7 +33,7 @@ public class RequestClient extends BaseClient {
     }
 
     public ResponseEntity<Object> createRequest(Long userId, Long eventId) {
-        return post(String.format("/%s/%s", userId, requestsUrl), Map.of("eventId", eventId));
+        return post(String.format("/%s/%s?eventId={eventId}", userId, requestsUrl), Map.of("eventId", eventId));
     }
 
     public ResponseEntity<Object> getRequestsByUser(Long userId) {

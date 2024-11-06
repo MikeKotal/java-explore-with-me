@@ -93,9 +93,11 @@ public class EventServiceImpl implements EventService {
         Event event = getEventById(eventId);
         Category category = userRequest.getCategory() == null ? event.getCategory()
                 : getCategoryById(userRequest.getCategory());
-        if (userRequest.getStateAction().equals(StateAction.PUBLISH_EVENT.name())
-                || userRequest.getStateAction().equals(StateAction.REJECT_EVENT.name())) {
-            throw new ConditionException("Публиковать и отклонять события может только администратор системы");
+        if (userRequest.getStateAction() != null) {
+            if (userRequest.getStateAction().equals(StateAction.PUBLISH_EVENT.name())
+                    || userRequest.getStateAction().equals(StateAction.REJECT_EVENT.name())) {
+                throw new ConditionException("Публиковать и отклонять события может только администратор системы");
+            }
         }
         if (event.getState().equals(State.PUBLISHED)) {
             throw new ConditionException("Можно изменять только события находящиеся в статусах: PENDING, CANCELED");

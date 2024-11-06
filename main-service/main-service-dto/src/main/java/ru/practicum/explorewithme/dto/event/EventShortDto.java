@@ -8,8 +8,6 @@ import lombok.NoArgsConstructor;
 import ru.practicum.explorewithme.dto.category.CategoryDto;
 import ru.practicum.explorewithme.dto.user.UserShortDto;
 
-import java.time.LocalDateTime;
-
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Builder
@@ -21,7 +19,7 @@ public class EventShortDto {
     private String annotation;
     private CategoryDto category;
     private Integer confirmedRequests;
-    private LocalDateTime eventDate;
+    private String eventDate;
     private UserShortDto initiator;
     private Boolean paid;
     private Long views;

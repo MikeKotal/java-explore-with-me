@@ -10,14 +10,12 @@ import ru.practicum.explorewithme.dto.event.EventFullDto;
 import ru.practicum.explorewithme.dto.event.State;
 import ru.practicum.explorewithme.dto.event.UpdateEventRequest;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
-import static ru.practicum.explorewithme.dto.validators.DateTimeFormatValidator.FORMATTER;
 import static ru.practicum.explorewithme.server.TestData.createUpdateEventUserRequest;
 
 @Transactional
@@ -43,9 +41,9 @@ public class AdminEventIntegrationTest {
         assertThat(eventFullDto.getCategory().getId(), equalTo(1L));
         assertThat(eventFullDto.getCategory().getName(), equalTo("ТестКатегория"));
         assertThat(eventFullDto.getConfirmedRequests(), equalTo(0));
-        assertThat(eventFullDto.getCreatedOn(), equalTo(LocalDateTime.parse("2024-10-01 23:59:59", FORMATTER)));
+        assertThat(eventFullDto.getCreatedOn(), equalTo("2024-10-01 23:59:59"));
         assertThat(eventFullDto.getDescription(), equalTo("Мегаописание"));
-        assertThat(eventFullDto.getEventDate(), equalTo(LocalDateTime.parse("2024-10-01 23:59:59", FORMATTER)));
+        assertThat(eventFullDto.getEventDate(), equalTo("2024-10-01 23:59:59"));
         assertThat(eventFullDto.getInitiator(), notNullValue());
         assertThat(eventFullDto.getInitiator().getName(), equalTo("Name"));
         assertThat(eventFullDto.getInitiator().getEmail(), equalTo("test@test.ru"));
@@ -54,7 +52,7 @@ public class AdminEventIntegrationTest {
         assertThat(eventFullDto.getLocation().getLon(), equalTo(1.2));
         assertThat(eventFullDto.getPaid(), is(Boolean.TRUE));
         assertThat(eventFullDto.getParticipantLimit(), equalTo(2));
-        assertThat(eventFullDto.getPublishedOn(), equalTo(LocalDateTime.parse("2024-10-01 23:59:59", FORMATTER)));
+        assertThat(eventFullDto.getPublishedOn(), equalTo("2024-10-01 23:59:59"));
         assertThat(eventFullDto.getRequestModeration(), is(Boolean.TRUE));
         assertThat(eventFullDto.getState(), equalTo(State.CANCELED));
         assertThat(eventFullDto.getViews(), equalTo(0L));
@@ -72,9 +70,9 @@ public class AdminEventIntegrationTest {
         assertThat(eventFullDto.getCategory().getId(), equalTo(updateEventRequest.getCategory()));
         assertThat(eventFullDto.getCategory().getName(), equalTo("ТестКатегория1"));
         assertThat(eventFullDto.getConfirmedRequests(), equalTo(0));
-        assertThat(eventFullDto.getCreatedOn(), equalTo(LocalDateTime.parse("2024-10-01 23:59:59", FORMATTER)));
+        assertThat(eventFullDto.getCreatedOn(), equalTo("2024-10-01 23:59:59"));
         assertThat(eventFullDto.getDescription(), equalTo(updateEventRequest.getDescription()));
-        assertThat(eventFullDto.getEventDate(), equalTo(LocalDateTime.parse(updateEventRequest.getEventDate(), FORMATTER)));
+        assertThat(eventFullDto.getEventDate(), equalTo(updateEventRequest.getEventDate()));
         assertThat(eventFullDto.getInitiator(), notNullValue());
         assertThat(eventFullDto.getInitiator().getName(), equalTo("Name"));
         assertThat(eventFullDto.getInitiator().getEmail(), equalTo("test@test.ru"));
@@ -83,7 +81,7 @@ public class AdminEventIntegrationTest {
         assertThat(eventFullDto.getLocation().getLon(), equalTo(updateEventRequest.getLocation().getLon()));
         assertThat(eventFullDto.getPaid(), is(updateEventRequest.getPaid()));
         assertThat(eventFullDto.getParticipantLimit(), equalTo(updateEventRequest.getParticipantLimit()));
-        assertThat(eventFullDto.getPublishedOn(), equalTo(LocalDateTime.parse("2024-10-01 23:59:59", FORMATTER)));
+        assertThat(eventFullDto.getPublishedOn(), equalTo("2024-10-01 23:59:59"));
         assertThat(eventFullDto.getRequestModeration(), is(updateEventRequest.getRequestModeration()));
         assertThat(eventFullDto.getState(), equalTo(State.PENDING));
         assertThat(eventFullDto.getViews(), equalTo(0L));

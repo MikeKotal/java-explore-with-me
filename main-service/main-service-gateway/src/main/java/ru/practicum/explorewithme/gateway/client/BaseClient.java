@@ -51,8 +51,8 @@ public class BaseClient {
         return makeAndSendRequest(HttpMethod.PATCH, path, null, null, body);
     }
 
-    protected void delete(String path) {
-        makeAndSendRequest(HttpMethod.DELETE, path, null, null, null);
+    protected ResponseEntity<Object> delete(String path) {
+        return makeAndSendRequest(HttpMethod.DELETE, path, null, null, null);
     }
 
     private <T> ResponseEntity<Object> makeAndSendRequest(HttpMethod method, String path, String ip, @Nullable Map<String, Object> parameters, @Nullable T body) {
@@ -66,7 +66,7 @@ public class BaseClient {
                 statsServerResponse = rest.exchange(path, method, requestEntity, Object.class);
             }
         } catch (HttpStatusCodeException e) {
-            return ResponseEntity.status(e.getStatusCode()).body(e.getResponseBodyAsByteArray());
+            return ResponseEntity.status(e.getStatusCode()).contentType(MediaType.APPLICATION_JSON).body(e.getResponseBodyAsByteArray());
         }
         return prepareGatewayResponse(statsServerResponse);
     }

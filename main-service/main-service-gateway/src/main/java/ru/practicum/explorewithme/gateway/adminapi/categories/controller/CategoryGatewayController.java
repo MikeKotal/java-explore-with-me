@@ -36,7 +36,7 @@ public class CategoryGatewayController {
 
     @DeleteMapping("/{catId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteCategory(@PathVariable Long catId) {
-        categoryClient.deleteCategory(catId);
+    public ResponseEntity<Object> deleteCategory(@PathVariable Long catId) {
+        return categoryClient.deleteCategory(catId);
     }
 }

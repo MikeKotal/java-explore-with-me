@@ -19,7 +19,6 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
@@ -73,7 +72,7 @@ public class CategoryGatewayControllerTest {
 
     @Test
     public void whenDeleteCategoryThenReturn204() throws Exception {
-        doNothing().when(categoryClient).deleteCategory(anyLong());
+        when(categoryClient.deleteCategory(anyLong())).thenReturn(new ResponseEntity<>(HttpStatusCode.valueOf(204)));
 
         mockMvc.perform(delete("/admin/categories/1")
                         .characterEncoding(StandardCharsets.UTF_8)

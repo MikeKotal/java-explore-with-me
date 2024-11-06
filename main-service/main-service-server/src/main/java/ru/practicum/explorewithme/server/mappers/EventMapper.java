@@ -114,7 +114,7 @@ public class EventMapper {
         return oldEvent;
     }
 
-    private static LocalDateTime getParsedDateTime(LocalDateTime localDateTime) {
-        return localDateTime == null ? null : LocalDateTime.parse(localDateTime.format(FORMATTER), FORMATTER);
+    private static String getParsedDateTime(LocalDateTime localDateTime) {
+        return localDateTime == null ? null : localDateTime.format(FORMATTER);
     }
 }

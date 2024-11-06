@@ -22,6 +22,7 @@ import ru.practicum.explorewithme.server.privateapi.events.model.Event;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 import static ru.practicum.explorewithme.dto.validators.DateTimeFormatValidator.FORMATTER;
@@ -80,7 +81,7 @@ public class AdminEventServiceImpl implements AdminEventService {
             throw new ConditionException("Допустимо отклонять события находящиеся не в статусе PUBLISHED");
         }
         if (userRequest.getEventDate() != null) {
-            checkFutureEventDateTime(userRequest.getEventDate(), event.getEventDate());
+            checkFutureEventDateTime(userRequest.getEventDate(), event.getPublishedOn());
         }
         event = eventRepository.save(EventMapper.mapToUpdatedEvent(userRequest, category, event));
         log.info("Обновленное администратором событие: {}", event);
@@ -104,14 +105,10 @@ public class AdminEventServiceImpl implements AdminEventService {
     }
 
     private void checkFutureEventDateTime(String eventDate, LocalDateTime currentEventDate) {
-        LocalDateTime newEventDate = LocalDateTime.parse(eventDate, FORMATTER);
-        if (newEventDate.isBefore(LocalDateTime.now().plusHours(2))) {
-            log.error("Время события некорректно");
-            throw new ConditionException("Дата и время не может быть раньше, чем через два часа от текущего момента");
-        }
-        if (newEventDate.isBefore(currentEventDate.minusHours(1))) {
+        LocalDateTime newEventDate = LocalDateTime.parse(eventDate, FORMATTER).truncatedTo(ChronoUnit.MINUTES);
+        if (newEventDate.isBefore(currentEventDate.truncatedTo(ChronoUnit.MINUTES).minusHours(1))) {
             log.error("Расхождение нового времени и старого слишком большое");
-            throw new ConditionException("Дата начала изменяемого события должна быть не ранее чем за час от даты публикации");
+            throw new ValidationException("Дата начала изменяемого события должна быть не ранее чем за час от даты публикации");
         }
     }
 }

@@ -9,8 +9,6 @@ import ru.practicum.explorewithme.dto.category.CategoryDto;
 import ru.practicum.explorewithme.dto.location.LocationDto;
 import ru.practicum.explorewithme.dto.user.UserShortDto;
 
-import java.time.LocalDateTime;
-
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Builder
@@ -22,14 +20,14 @@ public class EventFullDto {
     private String annotation;
     private CategoryDto category;
     private Integer confirmedRequests;
-    private LocalDateTime createdOn;
+    private String createdOn;
     private String description;
-    private LocalDateTime eventDate;
+    private String eventDate;
     private UserShortDto initiator;
     private LocationDto location;
     private Boolean paid;
     private Integer participantLimit;
-    private LocalDateTime publishedOn;
+    private String publishedOn;
     private Boolean requestModeration;
     private State state;
     private Long views;

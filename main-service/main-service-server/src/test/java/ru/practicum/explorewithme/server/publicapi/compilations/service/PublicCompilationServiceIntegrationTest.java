@@ -9,14 +9,12 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.explorewithme.dto.compilation.CompilationDto;
 import ru.practicum.explorewithme.dto.event.EventShortDto;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
-import static ru.practicum.explorewithme.dto.validators.DateTimeFormatValidator.FORMATTER;
 
 @Transactional
 @ActiveProfiles("test")
@@ -57,7 +55,7 @@ public class PublicCompilationServiceIntegrationTest {
         assertThat(eventShortDto.getCategory().getId(), equalTo(2L));
         assertThat(eventShortDto.getCategory().getName(), equalTo("ТестКатегория1"));
         assertThat(eventShortDto.getConfirmedRequests(), equalTo(0));
-        assertThat(eventShortDto.getEventDate(), equalTo(LocalDateTime.parse("2024-10-01 23:59:59", FORMATTER)));
+        assertThat(eventShortDto.getEventDate(), equalTo("2024-10-01 23:59:59"));
         assertThat(eventShortDto.getInitiator(), notNullValue());
         assertThat(eventShortDto.getInitiator().getName(), equalTo("Name1"));
         assertThat(eventShortDto.getInitiator().getEmail(), equalTo("test1@test.ru"));

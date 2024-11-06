@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import ru.practicum.explorewithme.server.error.model.ApiError;
 import ru.practicum.explorewithme.server.exceptions.ConditionException;
 import ru.practicum.explorewithme.server.exceptions.NotFoundException;
+import ru.practicum.explorewithme.server.exceptions.ValidationException;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -21,12 +22,23 @@ public class ErrorHandler {
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     @ExceptionHandler
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
     public ApiError handleNotFound(final NotFoundException e) {
         return ApiError.builder()
                 .status(HttpStatus.NOT_FOUND.name())
                 .message(e.getMessage())
                 .reason("Объект не был найден")
+                .timestamp(LocalDateTime.now().format(FORMATTER))
+                .build();
+    }
+
+    @ExceptionHandler(ValidationException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ApiError handleRequestValidation(final ValidationException e) {
+        return ApiError.builder()
+                .status(HttpStatus.BAD_REQUEST.name())
+                .message(e.getMessage())
+                .reason("Запрос сформирован некорректно")
                 .timestamp(LocalDateTime.now().format(FORMATTER))
                 .build();
     }

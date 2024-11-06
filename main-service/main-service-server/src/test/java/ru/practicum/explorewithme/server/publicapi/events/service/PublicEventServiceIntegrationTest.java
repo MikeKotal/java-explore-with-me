@@ -18,7 +18,6 @@ import ru.practicum.explorewithme.dto.event.SortType;
 import ru.practicum.explorewithme.dto.event.State;
 import ru.practicum.explorewithme.server.publicapi.client.StatsGatewayClient;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -29,7 +28,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyMap;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
-import static ru.practicum.explorewithme.dto.validators.DateTimeFormatValidator.FORMATTER;
 import static ru.practicum.explorewithme.server.TestData.createViewStatsDto;
 
 @Transactional
@@ -62,7 +60,7 @@ public class PublicEventServiceIntegrationTest {
         assertThat(eventShortDto.getCategory().getId(), equalTo(2L));
         assertThat(eventShortDto.getCategory().getName(), equalTo("ТестКатегория1"));
         assertThat(eventShortDto.getConfirmedRequests(), equalTo(0));
-        assertThat(eventShortDto.getEventDate(), equalTo(LocalDateTime.parse("2024-10-01 23:59:59", FORMATTER)));
+        assertThat(eventShortDto.getEventDate(), equalTo("2024-10-01 23:59:59"));
         assertThat(eventShortDto.getInitiator(), notNullValue());
         assertThat(eventShortDto.getInitiator().getName(), equalTo("Name1"));
         assertThat(eventShortDto.getInitiator().getEmail(), equalTo("test1@test.ru"));
@@ -86,9 +84,9 @@ public class PublicEventServiceIntegrationTest {
         assertThat(eventFullDto.getCategory().getId(), equalTo(2L));
         assertThat(eventFullDto.getCategory().getName(), equalTo("ТестКатегория1"));
         assertThat(eventFullDto.getConfirmedRequests(), equalTo(0));
-        assertThat(eventFullDto.getCreatedOn(), equalTo(LocalDateTime.parse("2024-10-01 23:59:59", FORMATTER)));
+        assertThat(eventFullDto.getCreatedOn(), equalTo("2024-10-01 23:59:59"));
         assertThat(eventFullDto.getDescription(), equalTo("Запросный"));
-        assertThat(eventFullDto.getEventDate(), equalTo(LocalDateTime.parse("2024-10-01 23:59:59", FORMATTER)));
+        assertThat(eventFullDto.getEventDate(), equalTo("2024-10-01 23:59:59"));
         assertThat(eventFullDto.getInitiator(), notNullValue());
         assertThat(eventFullDto.getInitiator().getName(), equalTo("Name1"));
         assertThat(eventFullDto.getInitiator().getEmail(), equalTo("test1@test.ru"));
@@ -97,7 +95,7 @@ public class PublicEventServiceIntegrationTest {
         assertThat(eventFullDto.getLocation().getLon(), equalTo(1.2));
         assertThat(eventFullDto.getPaid(), is(Boolean.TRUE));
         assertThat(eventFullDto.getParticipantLimit(), equalTo(2));
-        assertThat(eventFullDto.getPublishedOn(), equalTo(LocalDateTime.parse("2024-10-01 23:59:59", FORMATTER)));
+        assertThat(eventFullDto.getPublishedOn(), equalTo("2024-10-01 23:59:59"));
         assertThat(eventFullDto.getRequestModeration(), is(Boolean.TRUE));
         assertThat(eventFullDto.getState(), equalTo(State.PUBLISHED));
         assertThat(eventFullDto.getViews(), equalTo(10L));
