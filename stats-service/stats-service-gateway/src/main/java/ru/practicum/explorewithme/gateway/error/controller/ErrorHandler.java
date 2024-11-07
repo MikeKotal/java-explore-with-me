@@ -3,6 +3,7 @@ package ru.practicum.explorewithme.gateway.error.controller;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingRequestValueException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -25,6 +26,12 @@ public class ErrorHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleJakartaValidation(final MethodArgumentNotValidException e) {
         return new ErrorResponse(Objects.requireNonNull(e.getBindingResult().getFieldError()).getDefaultMessage());
+    }
+
+    @ExceptionHandler(MissingRequestValueException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handleMissingFieldsValidation(final MissingRequestValueException e) {
+        return new ErrorResponse(String.format("Не переданы обязательные параметры: %s", e.getMessage()));
     }
 
     @ExceptionHandler
