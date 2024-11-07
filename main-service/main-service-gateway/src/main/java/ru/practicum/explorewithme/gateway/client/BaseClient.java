@@ -1,5 +1,6 @@
 package ru.practicum.explorewithme.gateway.client;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -12,6 +13,7 @@ import org.springframework.web.client.RestTemplate;
 import java.util.List;
 import java.util.Map;
 
+@Slf4j
 public class BaseClient {
     protected final RestTemplate rest;
 
@@ -40,7 +42,9 @@ public class BaseClient {
     }
 
     protected <T> ResponseEntity<Object> post(String path, T body) {
-        return makeAndSendRequest(HttpMethod.POST, path, null, null, body);
+        ResponseEntity<Object> objectResponseEntity = makeAndSendRequest(HttpMethod.POST, path, null, null, body);
+        log.info("Ответ от метода post: {}", objectResponseEntity);
+        return objectResponseEntity;
     }
 
     protected ResponseEntity<Object> patch(String path) {
@@ -61,14 +65,19 @@ public class BaseClient {
         ResponseEntity<Object> statsServerResponse;
         try {
             if (parameters != null) {
+                log.info("Метод запроса: {} URL запроса: {}, Параметры запроса: {}, тело запроса: {}", method, path, parameters, requestEntity);
                 statsServerResponse = rest.exchange(path, method, requestEntity, Object.class, parameters);
             } else {
+                log.info("Метод запроса: {} URL запроса: {}, тело запроса: {}", method, path, requestEntity);
                 statsServerResponse = rest.exchange(path, method, requestEntity, Object.class);
             }
         } catch (HttpStatusCodeException e) {
+            log.info("Произошла ошибка: {}", e.getMessage());
             return ResponseEntity.status(e.getStatusCode()).contentType(MediaType.APPLICATION_JSON).body(e.getResponseBodyAsByteArray());
         }
-        return prepareGatewayResponse(statsServerResponse);
+        ResponseEntity<Object> objectResponseEntity = prepareGatewayResponse(statsServerResponse);
+        log.info("Ответ от makeAndSendRequest: {}", objectResponseEntity);
+        return objectResponseEntity;
     }
 
     private HttpHeaders defaultHeaders(String ip) {
@@ -82,16 +91,22 @@ public class BaseClient {
     }
 
     private static ResponseEntity<Object> prepareGatewayResponse(ResponseEntity<Object> response) {
-        if (response.getStatusCode().is2xxSuccessful()) {
-            return response;
-        }
+        log.info("Ответ в prepareGatewayResponse: {}", response);
 
-        ResponseEntity.BodyBuilder responseBuilder = ResponseEntity.status(response.getStatusCode());
+        HttpHeaders headers = new HttpHeaders();
+        response.getHeaders().forEach((key, value) -> {
+            if (!key.equalsIgnoreCase("Transfer-Encoding")) {
+                headers.put(key, value);
+            }
+        });
+
+        ResponseEntity.BodyBuilder responseBuilder = ResponseEntity.status(response.getStatusCode()).headers(headers);
 
         if (response.hasBody()) {
             return responseBuilder.body(response.getBody());
         }
 
+        log.info("Обновленный ответ от prepareGatewayResponse: {}", responseBuilder);
         return responseBuilder.build();
     }
 }

@@ -14,12 +14,13 @@ import ru.practicum.explorewithme.server.mappers.CategoryMapper;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-@Transactional
+@Transactional(readOnly = true)
 public class CategoryServiceImpl implements CategoryService {
 
     private final CategoryRepository categoryRepository;
 
     @Override
+    @Transactional
     public CategoryDto createCategory(NewCategoryRequest categoryRequest) {
         log.info("Запрос на создание категории {}", categoryRequest);
         Category category = categoryRepository.save(CategoryMapper.mapToCategory(categoryRequest));
@@ -28,6 +29,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    @Transactional
     public CategoryDto updateCategory(NewCategoryRequest categoryRequest, Long catId) {
         log.info("Запрос на обновление категории с id {}", catId);
         Category newCat = findCategoryById(catId);
@@ -38,6 +40,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    @Transactional
     public void deleteCategory(Long catId) {
         log.info("Запрос на удаление категории с id {}", catId);
         Category category = findCategoryById(catId);

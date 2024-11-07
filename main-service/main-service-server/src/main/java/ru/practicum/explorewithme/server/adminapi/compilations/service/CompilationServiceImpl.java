@@ -23,7 +23,7 @@ import java.util.TreeSet;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-@Transactional
+@Transactional(readOnly = true)
 public class CompilationServiceImpl implements CompilationService {
 
     private final CompilationRepository compilationRepository;
@@ -31,6 +31,7 @@ public class CompilationServiceImpl implements CompilationService {
     public static final Sort ORDER_BY_EVENT_DAY = Sort.by(Sort.Direction.ASC, "eventDate");
 
     @Override
+    @Transactional
     public CompilationDto createCompilation(NewCompilationRequest compilationRequest) {
         log.info("Запрос на создание новой подборки {}", compilationRequest);
         Set<Event> events = new HashSet<>();
@@ -44,6 +45,7 @@ public class CompilationServiceImpl implements CompilationService {
     }
 
     @Override
+    @Transactional
     public CompilationDto updateCompilation(Long compId, UpdateCompilationRequest updateCompilationRequest) {
         log.info("Запрос на обноление подборки с id {}", compId);
         Compilation compilation = getCompilationById(compId);
@@ -59,6 +61,7 @@ public class CompilationServiceImpl implements CompilationService {
     }
 
     @Override
+    @Transactional
     public void deleteCompilation(Long compId) {
         log.info("Запрос на удаление подборки с id {}", compId);
         Compilation compilation = getCompilationById(compId);
