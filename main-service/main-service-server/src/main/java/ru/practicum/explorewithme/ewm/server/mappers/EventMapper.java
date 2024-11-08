@@ -15,6 +15,7 @@ import ru.practicum.explorewithme.ewm.server.models.Event;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.HashSet;
 
 import static ru.practicum.explorewithme.dto.validators.DateTimeFormatValidator.FORMATTER;
 
@@ -43,6 +44,8 @@ public class EventMapper {
                 .requestModeration(event.getRequestModeration())
                 .state(event.getState())
                 .views(event.getViews())
+                .comments(event.getComments() == null ? new HashSet<>()
+                        : CommentMapper.mapToCommentSet(event.getComments()))
                 .build();
         log.info("EventFullDto из маппера: {}", eventFullDto);
         return eventFullDto;

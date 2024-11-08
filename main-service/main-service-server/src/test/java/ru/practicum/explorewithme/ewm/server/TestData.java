@@ -3,6 +3,9 @@ package ru.practicum.explorewithme.ewm.server;
 import org.apache.commons.lang3.RandomStringUtils;
 import ru.practicum.explorewithme.dto.category.CategoryDto;
 import ru.practicum.explorewithme.dto.category.NewCategoryRequest;
+import ru.practicum.explorewithme.dto.comment.CommentDto;
+import ru.practicum.explorewithme.dto.comment.CommentRequest;
+import ru.practicum.explorewithme.dto.comment.CommentShortDto;
 import ru.practicum.explorewithme.dto.compilation.CompilationDto;
 import ru.practicum.explorewithme.dto.compilation.NewCompilationRequest;
 import ru.practicum.explorewithme.dto.compilation.UpdateCompilationRequest;
@@ -203,6 +206,29 @@ public class TestData {
                 .app("main-service-server")
                 .uri("/events/1")
                 .hits(10L)
+                .build();
+    }
+
+    public static CommentRequest createCommentRequest() {
+        return CommentRequest.builder()
+                .comment("Тестовый коментарий для события")
+                .build();
+    }
+
+    public static CommentDto createCommentDto() {
+        return CommentDto.builder()
+                .id(1L)
+                .commenter(createUserShortDto())
+                .comment("Тестовый комментарий для события")
+                .createdAt(FORMATTED_DATE_TIME)
+                .build();
+    }
+
+    public static CommentShortDto createCommentShortDto() {
+        return CommentShortDto.builder()
+                .commenter("Тест Тестович")
+                .comment("Тестовый коментария для события")
+                .createdAt(FORMATTED_DATE_TIME)
                 .build();
     }
 }
