@@ -2,7 +2,7 @@
 	"info": {
 		"_postman_id": "5d098551-11ed-4b01-a8e3-5a1124b5154f",
 		"name": "Test Explore With Me - Comment feature",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
 		"_exporter_id": "20286048"
 	},
 	"item": [
