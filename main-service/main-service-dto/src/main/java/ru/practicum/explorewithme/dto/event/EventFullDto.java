@@ -6,8 +6,11 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.practicum.explorewithme.dto.category.CategoryDto;
+import ru.practicum.explorewithme.dto.comment.CommentShortDto;
 import ru.practicum.explorewithme.dto.location.LocationDto;
 import ru.practicum.explorewithme.dto.user.UserShortDto;
+
+import java.util.Set;
 
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -31,4 +34,5 @@ public class EventFullDto {
     private Boolean requestModeration;
     private State state;
     private Long views;
+    private Set<CommentShortDto> comments;
 }

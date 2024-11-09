@@ -33,3 +33,7 @@ VALUES(true, 'ТестоваяПодборка');
 MERGE INTO event_compilations(event_id, compilation_id)
 KEY(compilation_id)
 VALUES(2, 1);
+
+MERGE INTO comments(event_id, commenter_id, comment, created_at)
+KEY(comment)
+VALUES(1, 1, 'Супер комментарий', '2024-10-01 23:59:59'), (1, 2, 'Полностью поддерживаю', '2024-10-02 23:59:59');

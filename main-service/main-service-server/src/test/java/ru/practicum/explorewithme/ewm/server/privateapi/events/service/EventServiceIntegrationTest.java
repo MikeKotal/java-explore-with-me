@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
+import ru.practicum.explorewithme.dto.comment.CommentShortDto;
 import ru.practicum.explorewithme.dto.event.EventFullDto;
 import ru.practicum.explorewithme.dto.event.EventRequestStatusUpdateRequest;
 import ru.practicum.explorewithme.dto.event.EventRequestStatusUpdateResultDto;
@@ -119,6 +120,23 @@ public class EventServiceIntegrationTest {
         assertThat(eventFullDto.getRequestModeration(), is(Boolean.TRUE));
         assertThat(eventFullDto.getState(), equalTo(State.CANCELED));
         assertThat(eventFullDto.getViews(), equalTo(0L));
+    }
+
+    @Test
+    public void checkSuccessGetCommentEvent() {
+        EventFullDto eventFullDto = eventService.getEventByUserAndEventId(1L, 1L);
+
+        assertThat(eventFullDto.getComments(), notNullValue());
+        assertThat(eventFullDto.getComments().size(), equalTo(2));
+
+        List<CommentShortDto> commentDtos = eventFullDto.getComments().stream().toList();
+        assertThat(commentDtos.getFirst().getCommenter(), equalTo("Name"));
+        assertThat(commentDtos.getFirst().getComment(), equalTo("Супер комментарий"));
+        assertThat(commentDtos.getFirst().getCreatedAt(), equalTo("2024-10-01 23:59:59"));
+
+        assertThat(commentDtos.getLast().getCommenter(), equalTo("Name1"));
+        assertThat(commentDtos.getLast().getComment(), equalTo("Полностью поддерживаю"));
+        assertThat(commentDtos.getLast().getCreatedAt(), equalTo("2024-10-02 23:59:59"));
     }
 
     @Test

@@ -47,6 +47,10 @@ public class BaseClient {
         return objectResponseEntity;
     }
 
+    protected <T> ResponseEntity<Object> post(String path, @Nullable Map<String, Object> parameters, T body) {
+        return makeAndSendRequest(HttpMethod.POST, path, null, parameters, body);
+    }
+
     protected ResponseEntity<Object> patch(String path) {
         return makeAndSendRequest(HttpMethod.PATCH, path, null, null, null);
     }
